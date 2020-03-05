@@ -9,6 +9,7 @@ logging.basicConfig(format=LOG_FORMAT, level=logging.INFO,
 
 logger = logging.getLogger(__name__)
 
+# Dict for logging users actions
 LOG_ACTIONS = {}
 
 
@@ -26,6 +27,7 @@ def log(function):
             "text": update["message"]["text"]
         }
 
+        # Logging a last 5 user actions
         if LOG_ACTIONS.get(LOG["user_id"]):
             LOG_ACTIONS[LOG["user_id"]].insert(0, LOG)
             if len(LOG_ACTIONS[LOG["user_id"]]) > 5:
@@ -33,6 +35,7 @@ def log(function):
         else:
             LOG_ACTIONS[LOG["user_id"]] = [LOG]
 
+        # Create the string for a nice output view
         LOG_INFO = f"{LOG['call']}('{LOG['text']}') - user:[id: {LOG['user_id']} | username: {LOG['user_name']}({LOG['user_first_name']} {LOG['user_last_name']})]"
         print(LOG["time"], LOG_INFO)
         logger.info(LOG_INFO)
