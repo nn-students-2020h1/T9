@@ -22,8 +22,14 @@ def chat_help(update: Update, context: CallbackContext):
 @log
 def history(update: Update, context: CallbackContext):
     """Send a message when the command /history is issued."""
+
+    # Get a list [{logs}] with user logs
     user_logs = [log for log in LOG_ACTIONS[update.effective_user['id']]]
+
+    # Get a list of strings containing call and text attributes (see log.py)
     user_actions = [f'{act["call"]}:({act["text"]})' for act in user_logs]
+
+    # Convert the list of actions to a string separated by the Enter character
     msg = '\n'.join(user_actions)
     update.message.reply_text(msg)
 
