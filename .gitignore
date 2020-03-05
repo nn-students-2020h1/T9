@@ -171,3 +171,4 @@ $RECYCLE.BIN/
 
 # End of https://www.gitignore.io/api/git,code,venv,batch,python,windows
 setup.py
+*.log

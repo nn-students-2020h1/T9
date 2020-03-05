@@ -1,33 +1,41 @@
 # -*- coding: utf-8 -*-
 import logging
+from time import localtime, strftime
 
 # Enable logging
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+LOG_FORMAT = '%(asctime)s - %(levelname)s - %(name)s - %(message)s'
+logging.basicConfig(format=LOG_FORMAT, level=logging.INFO,
+                    filename="bot.log", filemode='w')
 
 logger = logging.getLogger(__name__)
 
-LOG_ACTIONS = []
+LOG_ACTIONS = {}
 
 
 def log(function):
     def inner(*args, **kwargs):
         update = args[0]
-        i = len(LOG_ACTIONS)
-        LOG_ACTIONS.append({
-            "date": update["message"]["date"],
+
+        LOG = {
+            "time": strftime("%Y-%m-%d %H:%M:%S", localtime()),
             "call": function.__name__,
-            "user": update.effective_user,
+            "user_id": update.effective_user['id'],
+            "user_name": update.effective_user['username'],
+            "user_first_name": update.effective_user['first_name'],
+            "user_last_name": update.effective_user['last_name'],
             "text": update["message"]["text"]
-        })
-        print(
-            f"{LOG_ACTIONS[i]['date']} |",
-            f"call: {LOG_ACTIONS[i]['call']} |",
-            f"id: {LOG_ACTIONS[i]['user']['id']} |",
-            f"user: {LOG_ACTIONS[i]['user']['username']}",
-            f"({LOG_ACTIONS[i]['user']['first_name']}",
-            f"{LOG_ACTIONS[i]['user']['last_name']}) |",
-            f"text: {LOG_ACTIONS[i]['text']}"
-        )
+        }
+
+        if LOG_ACTIONS.get(LOG["user_id"]):
+            LOG_ACTIONS[LOG["user_id"]].insert(0, LOG)
+            if len(LOG_ACTIONS[LOG["user_id"]]) > 5:
+                LOG_ACTIONS[LOG["user_id"]] = LOG_ACTIONS[LOG["user_id"]][:5]
+        else:
+            LOG_ACTIONS[LOG["user_id"]] = [LOG]
+
+        LOG_INFO = f"{LOG['call']}('{LOG['text']}') - user:[id: {LOG['user_id']} | username: {LOG['user_name']}({LOG['user_first_name']} {LOG['user_last_name']})]"
+        print(LOG["time"], LOG_INFO)
+        logger.info(LOG_INFO)
+
         return function(*args, **kwargs)
     return inner
