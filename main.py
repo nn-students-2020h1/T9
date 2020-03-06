@@ -3,7 +3,7 @@ from setup import PROXY, TOKEN
 from telegram import Bot
 from telegram.ext import CommandHandler, Filters, MessageHandler, Updater
 from bot.handlers import start, chat_help, echo, error, history
-from bot.log import logger
+from bot.log import logger, dump_logs
 
 
 def main():
@@ -28,6 +28,7 @@ def main():
     # SIGTERM or SIGABRT. This should be used most of the time, since
     # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
+    dump_logs()
 
 
 if __name__ == '__main__':

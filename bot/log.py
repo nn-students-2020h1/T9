@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import logging
 from time import localtime, strftime
+import pickle
+
 
 # Enable logging
 LOG_FORMAT = '%(asctime)s - %(levelname)s - %(name)s - %(message)s'
@@ -9,8 +11,26 @@ logging.basicConfig(format=LOG_FORMAT, level=logging.INFO,
 
 logger = logging.getLogger(__name__)
 
+
+def load_logs():
+    '''Load users actions log from pickle file'''
+    try:
+        with open("log.pickle", "rb") as f:
+            LOG_ACTIONS = pickle.load(f)
+    except:
+        LOG_ACTIONS = {}
+    finally:
+        return LOG_ACTIONS
+
+
+def dump_logs():
+    '''Dump users actions to pickle file'''
+    with open('log.pickle', 'wb') as f:
+        pickle.dump(LOG_ACTIONS, f)
+
+
 # Dict for logging users actions
-LOG_ACTIONS = {}
+LOG_ACTIONS = load_logs()
 
 
 def log(function):
