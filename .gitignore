@@ -10,6 +10,7 @@
 
 ### Code ###
 .vscode
+
 ### Git ###
 # Created by git for backups. To disable backups in Git:
 # $ git config --global mergetool.keepBackup false
@@ -170,5 +171,5 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/git,code,venv,batch,python,windows
-setup.py
 *.log
+*.pickle
