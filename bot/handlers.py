@@ -27,7 +27,7 @@ def history(update: Update, context: CallbackContext):
     user_logs = [log for log in LOG_ACTIONS[update.effective_user['id']]]
 
     # Get a list of strings containing call and text attributes (see log.py)
-    user_actions = [f'{act["call"]}:({act["text"]})' for act in user_logs]
+    user_actions = [f'{act["call"]}:({act["text"]})' for act in user_logs][:5]
 
     # Convert the list of actions to a string separated by the Enter character
     msg = '\n'.join(user_actions)

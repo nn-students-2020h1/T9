@@ -31,6 +31,7 @@ def dump_logs():
 
 # Dict for logging users actions
 LOG_ACTIONS = load_logs()
+print(len(LOG_ACTIONS), "user logs has been loaded")
 
 
 def log(function):
@@ -47,11 +48,9 @@ def log(function):
             "text": update["message"]["text"]
         }
 
-        # Logging a last 5 user actions
+        # Logging user actions
         if LOG_ACTIONS.get(LOG["user_id"]):
             LOG_ACTIONS[LOG["user_id"]].insert(0, LOG)
-            if len(LOG_ACTIONS[LOG["user_id"]]) > 5:
-                LOG_ACTIONS[LOG["user_id"]] = LOG_ACTIONS[LOG["user_id"]][:5]
         else:
             LOG_ACTIONS[LOG["user_id"]] = [LOG]
 
