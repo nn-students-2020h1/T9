@@ -37,26 +37,24 @@ print(len(LOG_ACTIONS), "user logs has been loaded")
 def log(function):
     def inner(*args, **kwargs):
         update = args[0]
+        USER_ID = update.effective_user['id']
+        USER_NAME = update.effective_user['username']
 
-        LOG = {
+        USER_ACTION = {
             "time": strftime("%Y-%m-%d %H:%M:%S", localtime()),
             "call": function.__name__,
-            "user_id": update.effective_user['id'],
-            "user_name": update.effective_user['username'],
-            "user_first_name": update.effective_user['first_name'],
-            "user_last_name": update.effective_user['last_name'],
             "text": update["message"]["text"]
         }
 
         # Logging user actions
-        if LOG_ACTIONS.get(LOG["user_id"]):
-            LOG_ACTIONS[LOG["user_id"]].insert(0, LOG)
+        if LOG_ACTIONS.get(USER_ID):
+            LOG_ACTIONS[USER_ID].insert(0, USER_ACTION)
         else:
-            LOG_ACTIONS[LOG["user_id"]] = [LOG]
+            LOG_ACTIONS[USER_ID] = [USER_ACTION]
 
         # Create the string for a nice output view
-        LOG_INFO = f"{LOG['call']}('{LOG['text']}') - user:[id: {LOG['user_id']} | username: {LOG['user_name']}({LOG['user_first_name']} {LOG['user_last_name']})]"
-        print(LOG["time"], LOG_INFO)
+        LOG_INFO = f'user:[{USER_ID} ({USER_NAME})] - call:[{USER_ACTION["call"]}("{USER_ACTION["text"]}")]'
+        print(USER_ACTION["time"], LOG_INFO)
         logger.info(LOG_INFO)
 
         return function(*args, **kwargs)

@@ -30,7 +30,7 @@ def history(update: Update, context: CallbackContext):
     user_actions = [f'{act["call"]}:({act["text"]})' for act in user_logs][:5]
 
     # Convert the list of actions to a string separated by the Enter character
-    msg = '\n'.join(user_actions)
+    msg = "Action history:\n" + '\n'.join(user_actions)
     update.message.reply_text(msg)
 
 
