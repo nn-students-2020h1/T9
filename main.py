@@ -2,7 +2,7 @@
 from setup import PROXY, TOKEN
 from telegram import Bot
 from telegram.ext import CommandHandler, Filters, MessageHandler, Updater
-from bot.handlers import start, chat_help, echo, error, history
+from bot.handlers import start, chat_help, echo, error, history, quote
 from bot.log import logger, dump_logs
 
 
@@ -14,6 +14,7 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('help', chat_help))
     updater.dispatcher.add_handler(CommandHandler('history', history))
+    updater.dispatcher.add_handler(CommandHandler('quote', quote))
 
     # on noncommand i.e message - echo the message on Telegram
     updater.dispatcher.add_handler(MessageHandler(Filters.text, echo))

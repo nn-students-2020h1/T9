@@ -2,6 +2,7 @@
 from telegram import Update
 from telegram.ext import CallbackContext
 from bot.log import logger, log, ACTION_LOG
+from modules.quote import get_quote
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
@@ -38,6 +39,21 @@ def history(update: Update, context: CallbackContext):
 def echo(update: Update, context: CallbackContext):
     """Echo the user message."""
     update.message.reply_text(update.message.text)
+
+
+@log
+def quote(update: Update, context: CallbackContext):
+    quote, author, book, person = get_quote()
+    msg = quote + '\n'
+
+    if author:
+        msg += f"\nАвтор: {author}"
+    if book:
+        msg += f"\nКнига: {book}"
+    if person:
+        msg += f"\nПерсонаж: {person}"
+
+    update.message.reply_text(msg)
 
 
 @log
