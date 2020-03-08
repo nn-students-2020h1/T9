@@ -11,13 +11,20 @@ from modules.quote import get_quote
 @log
 def start(update: Update, context: CallbackContext):
     """Send a message when the command /start is issued."""
-    update.message.reply_text(f'Привет, {update.effective_user.first_name}!')
+    update.message.reply_text(
+        f'Привет, {update.effective_user.first_name}!\nСписок команд: /help')
 
 
 @log
 def chat_help(update: Update, context: CallbackContext):
     """Send a message when the command /help is issued."""
-    update.message.reply_text('Введи команду /start для начала. ')
+    msg = '''Команды:
+    /start - начало
+    /help - помощь
+    /history - история действий
+    /quote - случайная цитата'''
+
+    update.message.reply_text(msg)
 
 
 @log
@@ -31,7 +38,7 @@ def history(update: Update, context: CallbackContext):
     user_actions = [f'{act["call"]}:({act["text"]})' for act in user_logs][:5]
 
     # Convert the list of actions to a string separated by the Enter character
-    msg = "Action history:\n" + '\n'.join(user_actions)
+    msg = "Action history:\n    " + '\n    '.join(user_actions)
     update.message.reply_text(msg)
 
 
