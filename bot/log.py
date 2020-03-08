@@ -16,22 +16,22 @@ def load_logs():
     '''Load users actions log from pickle file'''
     try:
         with open("log.pickle", "rb") as f:
-            LOG_ACTIONS = pickle.load(f)
+            ACTION_LOG = pickle.load(f)
     except:
-        LOG_ACTIONS = {}
+        ACTION_LOG = {}
     finally:
-        return LOG_ACTIONS
+        return ACTION_LOG
 
 
 def dump_logs():
     '''Dump users actions to pickle file'''
     with open('log.pickle', 'wb') as f:
-        pickle.dump(LOG_ACTIONS, f)
+        pickle.dump(ACTION_LOG, f)
 
 
 # Dict for logging users actions
-LOG_ACTIONS = load_logs()
-print(len(LOG_ACTIONS), "user logs has been loaded")
+ACTION_LOG = load_logs()
+print(len(ACTION_LOG), "user logs has been loaded")
 
 
 def log(function):
@@ -47,10 +47,10 @@ def log(function):
         }
 
         # Logging user actions
-        if LOG_ACTIONS.get(USER_ID):
-            LOG_ACTIONS[USER_ID].insert(0, USER_ACTION)
+        if ACTION_LOG.get(USER_ID):
+            ACTION_LOG[USER_ID].insert(0, USER_ACTION)
         else:
-            LOG_ACTIONS[USER_ID] = [USER_ACTION]
+            ACTION_LOG[USER_ID] = [USER_ACTION]
 
         # Create the string for a nice output view
         LOG_INFO = f'user:[{USER_ID} ({USER_NAME})] - call:[{USER_ACTION["call"]}("{USER_ACTION["text"]}")]'

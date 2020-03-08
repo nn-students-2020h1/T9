@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from telegram import Update
 from telegram.ext import CallbackContext
-from bot.log import logger, log, LOG_ACTIONS
+from bot.log import logger, log, ACTION_LOG
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
@@ -24,7 +24,7 @@ def history(update: Update, context: CallbackContext):
     """Send a message when the command /history is issued."""
 
     # Get a list [{logs}] with user logs
-    user_logs = [log for log in LOG_ACTIONS[update.effective_user['id']]]
+    user_logs = [log for log in ACTION_LOG[update.effective_user['id']]]
 
     # Get a list of strings containing call and text attributes (see log.py)
     user_actions = [f'{act["call"]}:({act["text"]})' for act in user_logs][:5]
