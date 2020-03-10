@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-from setup import PROXY, TOKEN
 from telegram import Bot
 from telegram.ext import CommandHandler, Filters, MessageHandler, Updater
-from bot.handlers import start, chat_help, echo, error, history, quote
-from bot.log import logger, dump_logs
+
+from bot.handlers import chat_help, echo, error, history, quote, start
+from bot.log import dump_logs, logger
+from bot.setup import PROXY, TOKEN
 
 
 def main():
