@@ -4,8 +4,27 @@ from telegram.ext import CallbackContext
 from bot.log import logger, log, ACTION_LOG
 from modules.quote import get_quote
 
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import CallbackQueryHandler
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
+
+LEFTBUTTON = "callbackbuttonleft"
+RIGHTBUTTON = "callbackbuttonright"
+
+TITLES = {
+    LEFTBUTTON: "HISTORY",
+    RIGHTBUTTON: "QUOTE",
+}
+
+def inline_keyboard():
+    keyboard = [
+        [
+            InlineKeyboardButton(TITLES[LEFTBUTTON], callback_data=LEFTBUTTON),
+            InlineKeyboardButton(TITLES[RIGHTBUTTON], callback_data=RIGHTBUTTON)
+        ]
+    ]
+    return InlineKeyboardMarkup(keyboard)
 
 
 @log
@@ -23,8 +42,7 @@ def chat_help(update: Update, context: CallbackContext):
     /help - помощь
     /history - история действий
     /quote - случайная цитата'''
-
-    update.message.reply_text(msg)
+    update.message.reply_text(msg, reply_markup=inline_keyboard())
 
 
 @log
