@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from telegram import Update
 from telegram.ext import CallbackContext
-from bot.log import logger, log, ACTION_LOG
-from modules.quote import get_quote
+
+from bot.log import dataBase, log, logger
+from modules import content
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
@@ -22,7 +23,8 @@ def chat_help(update: Update, context: CallbackContext):
     /start - начало
     /help - помощь
     /history - история действий
-    /quote - случайная цитата'''
+    /quote - случайная цитата
+    /cat - картинка котика'''
 
     update.message.reply_text(msg)
 
@@ -30,15 +32,13 @@ def chat_help(update: Update, context: CallbackContext):
 @log
 def history(update: Update, context: CallbackContext):
     """Send a message when the command /history is issued."""
+    userId = update.effective_user['id']
+    logs = dataBase.getRecords(
+        'log', f"SELECT call, message FROM log WHERE userId={userId} ORDER BY time DESC", 5)
+    actions = '\n'.join([f"{log[0]}:({log[1]})" for log in logs])
 
-    # Get a list [{logs}] with user logs
-    user_logs = [log for log in ACTION_LOG[update.effective_user['id']]]
+    msg = f'''История запросов:\n{actions}'''
 
-    # Get a list of strings containing call and text attributes (see log.py)
-    user_actions = [f'{act["call"]}:({act["text"]})' for act in user_logs][:5]
-
-    # Convert the list of actions to a string separated by the Enter character
-    msg = "Action history:\n    " + '\n    '.join(user_actions)
     update.message.reply_text(msg)
 
 
@@ -49,9 +49,10 @@ def echo(update: Update, context: CallbackContext):
 
 
 @log
-def quote(update: Update, context: CallbackContext):
-    quote, author, book, person = get_quote()
-    msg = quote + '\n'
+def sendQuote(update: Update, context: CallbackContext):
+    """Send a message when the command /quote is issued."""
+    text, author, book, person = content.getQuote()
+    msg = text + '\n'
 
     if author:
         msg += f"\nАвтор: {author}"
@@ -61,6 +62,12 @@ def quote(update: Update, context: CallbackContext):
         msg += f"\nПерсонаж: {person}"
 
     update.message.reply_text(msg)
+
+
+@log
+def sendCat(update: Update, context: CallbackContext):
+    """Send a photo when the command /cat is issued."""
+    update.message.reply_photo(content.getCatImage())
 
 
 @log
