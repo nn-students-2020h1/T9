@@ -2,8 +2,8 @@
 from telegram import Bot
 from telegram.ext import CommandHandler, Filters, MessageHandler, Updater
 
-from bot.handlers import chat_help, echo, error, history, quote, start
-from bot.log import dump_logs, logger
+from bot.handlers import start, chat_help, echo, error, history, sendQuote, sendCat
+from bot.log import logger
 from bot.setup import PROXY, TOKEN
 
 
@@ -15,7 +15,8 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('help', chat_help))
     updater.dispatcher.add_handler(CommandHandler('history', history))
-    updater.dispatcher.add_handler(CommandHandler('quote', quote))
+    updater.dispatcher.add_handler(CommandHandler('quote', sendQuote))
+    updater.dispatcher.add_handler(CommandHandler('cat', sendCat))
 
     # on noncommand i.e message - echo the message on Telegram
     updater.dispatcher.add_handler(MessageHandler(Filters.text, echo))
@@ -30,7 +31,6 @@ def main():
     # SIGTERM or SIGABRT. This should be used most of the time, since
     # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
-    dump_logs()
 
 
 if __name__ == '__main__':
