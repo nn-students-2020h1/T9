@@ -2,7 +2,8 @@
 from telegram import Bot
 from telegram.ext import CommandHandler, Filters, MessageHandler, Updater
 
-from bot.handlers import start, chat_help, echo, error, history, sendQuote, sendCat
+from bot.handlers import (chat_help, echo, error, history, sendCatFact,
+                          sendCatImage, sendQuote, start)
 from bot.log import logger
 from bot.setup import PROXY, TOKEN
 
@@ -16,7 +17,8 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('help', chat_help))
     updater.dispatcher.add_handler(CommandHandler('history', history))
     updater.dispatcher.add_handler(CommandHandler('quote', sendQuote))
-    updater.dispatcher.add_handler(CommandHandler('cat', sendCat))
+    updater.dispatcher.add_handler(CommandHandler('cat', sendCatImage))
+    updater.dispatcher.add_handler(CommandHandler('fact', sendCatFact))
 
     # on noncommand i.e message - echo the message on Telegram
     updater.dispatcher.add_handler(MessageHandler(Filters.text, echo))

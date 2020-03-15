@@ -24,7 +24,8 @@ def chat_help(update: Update, context: CallbackContext):
     /help - помощь
     /history - история действий
     /quote - случайная цитата
-    /cat - картинка котика'''
+    /cat - картинка котика
+    /fact - популярный факт о котах'''
 
     update.message.reply_text(msg)
 
@@ -65,9 +66,15 @@ def sendQuote(update: Update, context: CallbackContext):
 
 
 @log
-def sendCat(update: Update, context: CallbackContext):
+def sendCatImage(update: Update, context: CallbackContext):
     """Send a photo when the command /cat is issued."""
     update.message.reply_photo(content.getCatImage())
+
+
+@log
+def sendCatFact(update: Update, context: CallbackContext):
+    """Send a text when the command /fact is issued."""
+    update.message.reply_text(content.getCatFact())
 
 
 @log

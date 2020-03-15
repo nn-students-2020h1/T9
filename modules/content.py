@@ -26,3 +26,9 @@ def getQuote():
     person = ' '.join(person.split())
 
     return text, author, book, person
+
+
+def getCatFact():
+    response = requests.get('https://cat-fact.herokuapp.com/facts/random')
+    data = response.json()
+    return data['text']
