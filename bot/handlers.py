@@ -1,34 +1,16 @@
 # -*- coding: utf-8 -*-
 from telegram import Update
 from telegram.ext import CallbackContext
+
+from Buttons1 import inline_keyboard
+from Buttons2 import BUTTON_HISTORY, BUTTON_QUOTES, BUTTON_FACT
 from bot.log import logger, log, ACTION_LOG
 from modules.quote import get_quote
-
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import CallbackQueryHandler
+import requests
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
 
-LEFTBUTTON = "callbackbuttonleft"
-RIGHTBUTTON = "callbackbuttonright"
-
-TITLES = {
-    LEFTBUTTON: "HISTORY",
-    RIGHTBUTTON: "QUOTE",
-}
-
-def inline_keyboard():
-    keyboard = [
-        [
-            InlineKeyboardButton(TITLES[LEFTBUTTON], callback_data=LEFTBUTTON),
-            InlineKeyboardButton(TITLES[RIGHTBUTTON], callback_data=RIGHTBUTTON)
-        ]
-    ]
-    return InlineKeyboardMarkup(keyboard)
-
-@log
 def fact(update: Update, context: CallbackContext):
-    import requests
     r = requests.get('https://cat-fact.herokuapp.com/facts')
     dict = r.json()['all']
     likes = 0
@@ -43,8 +25,8 @@ def fact(update: Update, context: CallbackContext):
 def start(update: Update, context: CallbackContext):
     """Send a message when the command /start is issued."""
     update.message.reply_text(
-        f'Привет, {update.effective_user.first_name}!\nСписок команд: /help')
-
+        f'Привет, {update.effective_user.first_name}!\nСписок команд: /help'
+    )
 
 @log
 def chat_help(update: Update, context: CallbackContext):
@@ -58,7 +40,6 @@ def chat_help(update: Update, context: CallbackContext):
     update.message.reply_text(msg, reply_markup=inline_keyboard())
 
 
-@log
 def history(update: Update, context: CallbackContext):
     """Send a message when the command /history is issued."""
 
@@ -75,11 +56,15 @@ def history(update: Update, context: CallbackContext):
 
 @log
 def echo(update: Update, context: CallbackContext):
+    if update.message.text == BUTTON_HISTORY:
+        return history(update=update, context=context)
+    if update.message.text == BUTTON_QUOTES:
+        return quote(update=update, context=context)
+    if update.message.text == BUTTON_FACT:
+        return fact(update=update, context=context)
     """Echo the user message."""
     update.message.reply_text(update.message.text)
 
-
-@log
 def quote(update: Update, context: CallbackContext):
     quote, author, book, person = get_quote()
     msg = quote + '\n'
@@ -92,7 +77,6 @@ def quote(update: Update, context: CallbackContext):
         msg += f"\nПерсонаж: {person}"
 
     update.message.reply_text(msg)
-
 
 @log
 def error(update: Update, context: CallbackContext):

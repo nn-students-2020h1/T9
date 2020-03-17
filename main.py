@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+from Buttons1 import keyboard_callback
 from setup import PROXY, TOKEN
 from telegram import Bot
 from telegram.ext import CommandHandler, Filters, MessageHandler, Updater
+from telegram.ext import CallbackQueryHandler
 from bot.handlers import start, chat_help, echo, error, history, quote, fact
+
 from bot.log import logger, dump_logs
 
 
@@ -16,6 +19,7 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('history', history))
     updater.dispatcher.add_handler(CommandHandler('quote', quote))
     updater.dispatcher.add_handler(CommandHandler('fact', fact))
+    updater.dispatcher.add_handler(CallbackQueryHandler(callback=keyboard_callback, pass_chat_data=True))
 
     # on noncommand i.e message - echo the message on Telegram
     updater.dispatcher.add_handler(MessageHandler(Filters.text, echo))
