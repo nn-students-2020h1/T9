@@ -26,6 +26,19 @@ def inline_keyboard():
     ]
     return InlineKeyboardMarkup(keyboard)
 
+@log
+def fact(update: Update, context: CallbackContext):
+    import requests
+    r = requests.get('https://cat-fact.herokuapp.com/facts')
+    dict = r.json()
+    dict2 = dict['all']
+    likes = 0
+    fact = ''
+    for Value in dict2:
+        if (Value['upvotes']) > likes:
+            likes = Value['upvotes']
+            fact = Value['text']
+    update.message.reply_text(fact)
 
 @log
 def start(update: Update, context: CallbackContext):
@@ -41,7 +54,8 @@ def chat_help(update: Update, context: CallbackContext):
     /start - начало
     /help - помощь
     /history - история действий
-    /quote - случайная цитата'''
+    /quote - случайная цитата
+    /fact - самый залайканный факт'''
     update.message.reply_text(msg, reply_markup=inline_keyboard())
 
 
