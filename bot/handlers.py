@@ -2,31 +2,19 @@
 from telegram import Update
 from telegram.ext import CallbackContext
 
-from Buttons1 import inline_keyboard, keyboard_callback
-from Buttons2 import BUTTON_HISTORY, BUTTON_QUOTES, BUTTON_FACT, reply_keyboard
-from bot.log import logger, log, ACTION_LOG
-from modules.quote import get_quote
-import requests
+from bot.log import dataBase, log, logger
+from modules import content
+
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
 
-def fact(update: Update, context: CallbackContext):
-    r = requests.get('https://cat-fact.herokuapp.com/facts')
-    dict = r.json()['all']
-    likes = 0
-    fact = ''
-    for Value in dict:
-        if (Value['upvotes']) > likes:
-            likes = Value['upvotes']
-            fact = Value['text']
-    update.message.reply_text(fact)
 
 @log
 def start(update: Update, context: CallbackContext):
     """Send a message when the command /start is issued."""
     update.message.reply_text(
-        f'Привет, {update.effective_user.first_name}!\nСписок команд: /help'
-    )
+        f'Привет, {update.effective_user.first_name}!\nСписок команд: /help')
+
 
 @log
 def chat_help(update: Update, context: CallbackContext):
@@ -36,38 +24,36 @@ def chat_help(update: Update, context: CallbackContext):
     /help - помощь
     /history - история действий
     /quote - случайная цитата
-    /fact - самый залайканный факт'''
-    update.message.reply_text(msg, reply_markup=reply_keyboard())
+    /cat - картинка котика
+    /fact - популярный факт о котах'''
+
+    update.message.reply_text(msg)
 
 
+@log
 def history(update: Update, context: CallbackContext):
     """Send a message when the command /history is issued."""
+    userId = update.effective_user['id']
+    logs = dataBase.getRecords(
+        'log', f"SELECT call, message FROM log WHERE userId={userId} ORDER BY time DESC", 5)
+    actions = '\n'.join([f"{log[0]}:({log[1]})" for log in logs])
 
-    # Get a list [{logs}] with user logs
-    user_logs = [log for log in ACTION_LOG[update.effective_user['id']]]
+    msg = f'''История запросов:\n{actions}'''
 
-    # Get a list of strings containing call and text attributes (see log.py)
-    user_actions = [f'{act["call"]}:({act["text"]})' for act in user_logs][:5]
-
-    # Convert the list of actions to a string separated by the Enter character
-    msg = "Action history:\n    " + '\n    '.join(user_actions)
     update.message.reply_text(msg)
 
 
 @log
 def echo(update: Update, context: CallbackContext):
-    if update.message.text == BUTTON_HISTORY:
-        return history(update=update, context=context)
-    if update.message.text == BUTTON_QUOTES:
-        return quote(update=update, context=context)
-    if update.message.text == BUTTON_FACT:
-        return fact(update=update, context=context)
     """Echo the user message."""
     update.message.reply_text(update.message.text)
 
-def quote(update: Update, context: CallbackContext):
-    quote, author, book, person = get_quote()
-    msg = quote + '\n'
+
+@log
+def sendQuote(update: Update, context: CallbackContext):
+    """Send a message when the command /quote is issued."""
+    text, author, book, person = content.getQuote()
+    msg = text + '\n'
 
     if author:
         msg += f"\nАвтор: {author}"
@@ -77,6 +63,19 @@ def quote(update: Update, context: CallbackContext):
         msg += f"\nПерсонаж: {person}"
 
     update.message.reply_text(msg)
+
+
+@log
+def sendCatImage(update: Update, context: CallbackContext):
+    """Send a photo when the command /cat is issued."""
+    update.message.reply_photo(content.getCatImage())
+
+
+@log
+def sendCatFact(update: Update, context: CallbackContext):
+    """Send a text when the command /fact is issued."""
+    update.message.reply_text(content.getCatFact())
+
 
 @log
 def error(update: Update, context: CallbackContext):

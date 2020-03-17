@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-from Buttons1 import keyboard_callback
-from setup import PROXY, TOKEN
 from telegram import Bot
 from telegram.ext import CommandHandler, Filters, MessageHandler, Updater
-from telegram.ext import CallbackQueryHandler
-from bot.handlers import start, chat_help, echo, error, history, quote, fact
 
-from bot.log import logger, dump_logs
+from bot.handlers import (chat_help, echo, error, history, sendCatFact,
+                          sendCatImage, sendQuote, start)
+from bot.log import logger
+from bot.setup import PROXY, TOKEN
 
 
 def main():
@@ -17,9 +16,9 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('help', chat_help))
     updater.dispatcher.add_handler(CommandHandler('history', history))
-    updater.dispatcher.add_handler(CommandHandler('quote', quote))
-    updater.dispatcher.add_handler(CommandHandler('fact', fact))
-    updater.dispatcher.add_handler(CallbackQueryHandler(callback=keyboard_callback, pass_chat_data=True))
+    updater.dispatcher.add_handler(CommandHandler('quote', sendQuote))
+    updater.dispatcher.add_handler(CommandHandler('cat', sendCatImage))
+    updater.dispatcher.add_handler(CommandHandler('fact', sendCatFact))
 
     # on noncommand i.e message - echo the message on Telegram
     updater.dispatcher.add_handler(MessageHandler(Filters.text, echo))
@@ -34,7 +33,6 @@ def main():
     # SIGTERM or SIGABRT. This should be used most of the time, since
     # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
-    dump_logs()
 
 
 if __name__ == '__main__':
