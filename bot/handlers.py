@@ -2,8 +2,8 @@
 from telegram import Update
 from telegram.ext import CallbackContext
 
-from Buttons1 import inline_keyboard
-from Buttons2 import BUTTON_HISTORY, BUTTON_QUOTES, BUTTON_FACT
+from Buttons1 import inline_keyboard, keyboard_callback
+from Buttons2 import BUTTON_HISTORY, BUTTON_QUOTES, BUTTON_FACT, reply_keyboard
 from bot.log import logger, log, ACTION_LOG
 from modules.quote import get_quote
 import requests
@@ -37,7 +37,7 @@ def chat_help(update: Update, context: CallbackContext):
     /history - история действий
     /quote - случайная цитата
     /fact - самый залайканный факт'''
-    update.message.reply_text(msg, reply_markup=inline_keyboard())
+    update.message.reply_text(msg, reply_markup=reply_keyboard())
 
 
 def history(update: Update, context: CallbackContext):
