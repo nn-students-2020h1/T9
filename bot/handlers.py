@@ -30,11 +30,10 @@ def inline_keyboard():
 def fact(update: Update, context: CallbackContext):
     import requests
     r = requests.get('https://cat-fact.herokuapp.com/facts')
-    dict = r.json()
-    dict2 = dict['all']
+    dict = r.json()['all']
     likes = 0
     fact = ''
-    for Value in dict2:
+    for Value in dict:
         if (Value['upvotes']) > likes:
             likes = Value['upvotes']
             fact = Value['text']
