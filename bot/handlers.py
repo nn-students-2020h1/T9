@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-from telegram import Update
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
-
-from Buttons2 import BUTTON_HISTORY, BUTTON_QUOTES, BUTTON_FACT, BUTTON_IMAGE, reply_keyboard
+from Buttons2 import  reply_keyboard
 from bot.log import dataBase, log, logger
 from modules import content
 
@@ -13,7 +12,7 @@ from modules import content
 def start(update: Update, context: CallbackContext):
     """Send a message when the command /start is issued."""
     update.message.reply_text(
-        f'Привет, {update.effective_user.first_name}!\nСписок команд: /help')
+        f'Привет, {update.effective_user.first_name}!\nСписок команд: /help', reply_markup=reply_keyboard())
 
 @log
 def chat_help(update: Update, context: CallbackContext):
@@ -26,7 +25,7 @@ def chat_help(update: Update, context: CallbackContext):
     /cat - картинка котика
     /fact - популярный факт о котах'''
 
-    update.message.reply_text(msg, reply_markup=reply_keyboard())
+    update.message.reply_text(msg)
 
 @log
 def history(update: Update, context: CallbackContext):
@@ -42,17 +41,10 @@ def history(update: Update, context: CallbackContext):
 
 @log
 def echo(update: Update, context: CallbackContext):
-   if update.message.text == BUTTON_HISTORY:
-        return history(update=update, context=context)
-   elif update.message.text == BUTTON_QUOTES:
-       return sendQuote(update=update, context=context)
-   elif update.message.text == BUTTON_FACT:
-       return sendCatFact(update=update, context=context)
-   elif update.message.text == BUTTON_IMAGE:
-       return sendCatImage(update=update, context=context)
    """Echo the user message."""
    update.message.reply_text(update.message.text)
 
+@log
 def sendQuote(update: Update, context: CallbackContext):
     """Send a message when the command /quote is issued."""
     text, author, book, person = content.getQuote()
@@ -67,10 +59,12 @@ def sendQuote(update: Update, context: CallbackContext):
 
     update.message.reply_text(msg)
 
+@log
 def sendCatImage(update: Update, context: CallbackContext):
     """Send a photo when the command /cat is issued."""
     update.message.reply_photo(content.getCatImage())
 
+@log
 def sendCatFact(update: Update, context: CallbackContext):
     """Send a text when the command /fact is issued."""
     update.message.reply_text(content.getCatFact())

@@ -1,9 +1,9 @@
 from telegram import KeyboardButton, ReplyKeyboardMarkup
 
-BUTTON_HISTORY = "HISTORY"
-BUTTON_QUOTES = "QUOTES"
-BUTTON_FACT = "FACT"
-BUTTON_IMAGE = "IMAGE"
+BUTTON_HISTORY = "/history"
+BUTTON_QUOTES = "/quote"
+BUTTON_FACT = "/fact"
+BUTTON_IMAGE = "/cat"
 
 def reply_keyboard():
     keyboard = [
@@ -16,6 +16,7 @@ def reply_keyboard():
             KeyboardButton(BUTTON_IMAGE),
         ],
     ]
+
     return ReplyKeyboardMarkup(
         keyboard=keyboard,
         resize_keyboard=True,
