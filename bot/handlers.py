@@ -1,20 +1,18 @@
 # -*- coding: utf-8 -*-
-from telegram import Update
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
-
+from Buttons2 import  reply_keyboard
 from bot.log import dataBase, log, logger
 from modules import content
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
 
-
 @log
 def start(update: Update, context: CallbackContext):
     """Send a message when the command /start is issued."""
     update.message.reply_text(
-        f'Привет, {update.effective_user.first_name}!\nСписок команд: /help')
-
+        f'Привет, {update.effective_user.first_name}!\nСписок команд: /help', reply_markup=reply_keyboard())
 
 @log
 def chat_help(update: Update, context: CallbackContext):
@@ -29,7 +27,6 @@ def chat_help(update: Update, context: CallbackContext):
 
     update.message.reply_text(msg)
 
-
 @log
 def history(update: Update, context: CallbackContext):
     """Send a message when the command /history is issued."""
@@ -42,12 +39,10 @@ def history(update: Update, context: CallbackContext):
 
     update.message.reply_text(msg)
 
-
 @log
 def echo(update: Update, context: CallbackContext):
-    """Echo the user message."""
-    update.message.reply_text(update.message.text)
-
+   """Echo the user message."""
+   update.message.reply_text(update.message.text)
 
 @log
 def sendQuote(update: Update, context: CallbackContext):
@@ -64,18 +59,15 @@ def sendQuote(update: Update, context: CallbackContext):
 
     update.message.reply_text(msg)
 
-
 @log
 def sendCatImage(update: Update, context: CallbackContext):
     """Send a photo when the command /cat is issued."""
     update.message.reply_photo(content.getCatImage())
 
-
 @log
 def sendCatFact(update: Update, context: CallbackContext):
     """Send a text when the command /fact is issued."""
     update.message.reply_text(content.getCatFact())
-
 
 @log
 def error(update: Update, context: CallbackContext):

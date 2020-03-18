@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from telegram import Bot
-from telegram.ext import CommandHandler, Filters, MessageHandler, Updater
+from telegram.ext import CommandHandler, Filters, MessageHandler, Updater, CallbackQueryHandler
 
+from Buttons1 import keyboard_callback
 from bot.handlers import (chat_help, echo, error, history, sendCatFact,
                           sendCatImage, sendQuote, start)
 from bot.log import logger
@@ -20,6 +21,8 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('cat', sendCatImage))
     updater.dispatcher.add_handler(CommandHandler('fact', sendCatFact))
 
+    #keyboard
+    updater.dispatcher.add_handler(CallbackQueryHandler(callback=keyboard_callback, pass_chat_data=True))
     # on noncommand i.e message - echo the message on Telegram
     updater.dispatcher.add_handler(MessageHandler(Filters.text, echo))
 
