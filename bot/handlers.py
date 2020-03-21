@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
+import csv
+import requests
+import datetime
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
-from Buttons2 import  reply_keyboard
+from bot.Buttons2 import reply_keyboard
 from bot.log import dataBase, log, logger
 from modules import content
 
@@ -23,8 +26,69 @@ def chat_help(update: Update, context: CallbackContext):
     /history - история действий
     /quote - случайная цитата
     /cat - картинка котика
-    /fact - популярный факт о котах'''
+    /fact - популярный факт о котах
+    /corono_stats - список 5 провинций, где больше всего новых заражённых
+    /country_stats - список 5 стран, где больше всего новых заражённых'''
 
+    update.message.reply_text(msg)
+
+def requestGit():
+    today = datetime.datetime.today()
+    r = requests.get(
+        f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{today}.csv")
+    actual = today
+    while r.status_code != 200:
+        delta = datetime.timedelta(days=1)
+        today = today - delta
+        prev = today.strftime("%m-%d-%Y")
+        r = requests.get(
+            f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{prev}.csv")
+        actual = prev
+
+    with open('virus.csv', 'w', newline='') as csvfile:
+        csvfile.writelines(r.text)
+    return actual
+
+@log
+def corono_stats(update: Update, context: CallbackContext):
+    actual = requestGit()
+    infected = {}
+    with open('virus.csv', 'r') as file:
+        reader = csv.DictReader(file)
+        k=0
+        for row in reader:
+            province = row['Province/State']
+            if province == '':
+                continue
+            confirmed = row["Confirmed"]
+            infected.update({province:confirmed})
+            k+=1
+            if (k==5):
+                break
+
+    msg=f'The most infected provinces on {actual}:\n'
+    for key, value in infected.items():
+        msg+=(key+': '+ value+'\n')
+    update.message.reply_text(msg)
+
+@log
+def stats_country(update: Update, context: CallbackContext):
+    actual = requestGit()
+    infected = {}
+    with open('virus.csv', 'r') as file:
+        reader = csv.DictReader(file)
+        k=0
+        for row in reader:
+            country = row['Country/Region']
+            confirmed = row["Confirmed"]
+            infected.update({country:confirmed})
+            k+=1
+            if (k==5):
+                break
+
+    msg=f'The most infected countries on {actual}:\n'
+    for key, value in infected.items():
+        msg+=(key+': '+ value+'\n')
     update.message.reply_text(msg)
 
 @log

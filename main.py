@@ -2,9 +2,9 @@
 from telegram import Bot
 from telegram.ext import CommandHandler, Filters, MessageHandler, Updater, CallbackQueryHandler
 
-from Buttons1 import keyboard_callback
+from bot.Buttons1 import keyboard_callback
 from bot.handlers import (chat_help, echo, error, history, sendCatFact,
-                          sendCatImage, sendQuote, start)
+                          sendCatImage, sendQuote, start, corono_stats, stats_country)
 from bot.log import logger
 from bot.setup import PROXY, TOKEN
 
@@ -20,6 +20,8 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('quote', sendQuote))
     updater.dispatcher.add_handler(CommandHandler('cat', sendCatImage))
     updater.dispatcher.add_handler(CommandHandler('fact', sendCatFact))
+    updater.dispatcher.add_handler(CommandHandler('corono_stats', corono_stats))
+    updater.dispatcher.add_handler(CommandHandler('country_stats', stats_country))
 
     #keyboard
     updater.dispatcher.add_handler(CallbackQueryHandler(callback=keyboard_callback, pass_chat_data=True))
