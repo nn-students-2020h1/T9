@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
-from Buttons2 import  reply_keyboard
+from bot.Buttons2 import reply_keyboard
 from bot.log import dataBase, log, logger
 from modules import content
 
@@ -23,9 +23,19 @@ def chat_help(update: Update, context: CallbackContext):
     /history - история действий
     /quote - случайная цитата
     /cat - картинка котика
-    /fact - популярный факт о котах'''
+    /fact - популярный факт о котах
+    /corono_stats - список 5 провинций, где больше всего новых заражённых
+    /country_stats - список 5 стран, где больше всего новых заражённых'''
 
     update.message.reply_text(msg)
+
+@log
+def corono_stats(update: Update, context: CallbackContext):
+    update.message.reply_text(content.collect_stats("Province/State"))
+
+@log
+def stats_country(update: Update, context: CallbackContext):
+    update.message.reply_text(content.collect_stats("Country/Region"))
 
 @log
 def history(update: Update, context: CallbackContext):

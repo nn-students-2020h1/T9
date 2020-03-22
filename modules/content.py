@@ -1,3 +1,5 @@
+import datetime
+import csv
 import requests
 from bs4 import BeautifulSoup
 
@@ -32,3 +34,35 @@ def getCatFact():
     response = requests.get('https://cat-fact.herokuapp.com/facts/random')
     data = response.json()
     return data['text']
+
+
+def requestGit():
+    actual = datetime.datetime.today()
+    data = actual.strftime("%m-%d-%Y")
+    r = requests.get(f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
+    delta = datetime.timedelta(days=1)
+    while r.status_code != 200:
+        actual = actual - delta
+        data = actual.strftime("%m-%d-%Y")
+        r = requests.get(f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
+
+    with open('virus.csv', 'w', newline='') as csvfile:
+        csvfile.writelines(r.text)
+    return actual
+
+
+def collect_stats(location):
+    actual = requestGit()
+    infected = {}
+    with open('virus.csv', 'r') as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            if row[location] == '':
+                continue
+            infected.update({row[location]:row['Confirmed']})
+            if len(infected) == 5:
+                break
+    stats = f'The most infected {location.lower().split("/")[0].replace("y", "ie") + "s"} on {actual.strftime("%d.%m.%Y")}:\n'
+    for key, value in infected.items():
+        stats += (key + ': ' + value + '\n')
+    return stats
