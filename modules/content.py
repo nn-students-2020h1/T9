@@ -1,3 +1,5 @@
+import datetime
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -32,3 +34,20 @@ def getCatFact():
     response = requests.get('https://cat-fact.herokuapp.com/facts/random')
     data = response.json()
     return data['text']
+
+def requestGit():
+    today = datetime.datetime.today()
+    data = today.strftime("%m-%d-%Y")
+    r = requests.get(f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
+    actual = today
+    while r.status_code != 200:
+        delta = datetime.timedelta(days=1)
+        today = today - delta
+        data = today.strftime("%m-%d-%Y")
+        r = requests.get(
+            f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
+        actual = today
+
+    with open('virus.csv', 'w', newline='') as csvfile:
+        csvfile.writelines(r.text)
+    return actual

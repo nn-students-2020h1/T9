@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 import csv
-import requests
-import datetime
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
 from bot.Buttons2 import reply_keyboard
@@ -10,6 +8,8 @@ from modules import content
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
+
+
 
 @log
 def start(update: Update, context: CallbackContext):
@@ -32,26 +32,9 @@ def chat_help(update: Update, context: CallbackContext):
 
     update.message.reply_text(msg)
 
-def requestGit():
-    today = datetime.datetime.today()
-    data = today.strftime("%m-%d-%Y")
-    r = requests.get(f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
-    actual = today
-    while r.status_code != 200:
-        delta = datetime.timedelta(days=1)
-        today = today - delta
-        data = today.strftime("%m-%d-%Y")
-        r = requests.get(
-            f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
-        actual = today
-
-    with open('virus.csv', 'w', newline='') as csvfile:
-        csvfile.writelines(r.text)
-    return actual
-
 @log
 def corono_stats(update: Update, context: CallbackContext):
-    actual = requestGit()
+    actual = content.requestGit()
     infected = {}
     with open('virus.csv', 'r') as file:
         reader = csv.DictReader(file)
@@ -73,7 +56,7 @@ def corono_stats(update: Update, context: CallbackContext):
 
 @log
 def stats_country(update: Update, context: CallbackContext):
-    actual = requestGit()
+    actual = content.requestGit()
     infected = {}
     with open('virus.csv', 'r') as file:
         reader = csv.DictReader(file)
