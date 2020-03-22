@@ -34,16 +34,16 @@ def chat_help(update: Update, context: CallbackContext):
 
 def requestGit():
     today = datetime.datetime.today()
-    r = requests.get(
-        f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{today}.csv")
+    data = today.strftime("%m-%d-%Y")
+    r = requests.get(f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
     actual = today
     while r.status_code != 200:
         delta = datetime.timedelta(days=1)
         today = today - delta
-        prev = today.strftime("%m-%d-%Y")
+        data = today.strftime("%m-%d-%Y")
         r = requests.get(
-            f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{prev}.csv")
-        actual = prev
+            f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
+        actual = today
 
     with open('virus.csv', 'w', newline='') as csvfile:
         csvfile.writelines(r.text)
@@ -66,7 +66,7 @@ def corono_stats(update: Update, context: CallbackContext):
             if (k==5):
                 break
 
-    msg=f'The most infected provinces on {actual}:\n'
+    msg=f'The most infected provinces on {actual.strftime("%d.%m.%Y")}:\n'
     for key, value in infected.items():
         msg+=(key+': '+ value+'\n')
     update.message.reply_text(msg)
@@ -86,7 +86,7 @@ def stats_country(update: Update, context: CallbackContext):
             if (k==5):
                 break
 
-    msg=f'The most infected countries on {actual}:\n'
+    msg=f'The most infected countries on {actual.strftime("%d.%m.%Y")}:\n'
     for key, value in infected.items():
         msg+=(key+': '+ value+'\n')
     update.message.reply_text(msg)
