@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import csv
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
 from bot.Buttons2 import reply_keyboard
@@ -8,8 +7,6 @@ from modules import content
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
-
-
 
 @log
 def start(update: Update, context: CallbackContext):
@@ -34,45 +31,11 @@ def chat_help(update: Update, context: CallbackContext):
 
 @log
 def corono_stats(update: Update, context: CallbackContext):
-    actual = content.requestGit()
-    infected = {}
-    with open('virus.csv', 'r') as file:
-        reader = csv.DictReader(file)
-        k=0
-        for row in reader:
-            province = row['Province/State']
-            if province == '':
-                continue
-            confirmed = row["Confirmed"]
-            infected.update({province:confirmed})
-            k+=1
-            if (k==5):
-                break
-
-    msg=f'The most infected provinces on {actual.strftime("%d.%m.%Y")}:\n'
-    for key, value in infected.items():
-        msg+=(key+': '+ value+'\n')
-    update.message.reply_text(msg)
+    update.message.reply_text(content.collect_stats("Province/State"))
 
 @log
 def stats_country(update: Update, context: CallbackContext):
-    actual = content.requestGit()
-    infected = {}
-    with open('virus.csv', 'r') as file:
-        reader = csv.DictReader(file)
-        k=0
-        for row in reader:
-            country = row['Country/Region']
-            confirmed = row["Confirmed"]
-            infected.update({country:confirmed})
-            k+=1
-            if (k==5):
-                break
-
-    msg=f'The most infected countries on {actual.strftime("%d.%m.%Y")}:\n'
-    for key, value in infected.items():
-        msg+=(key+': '+ value+'\n')
-    update.message.reply_text(msg)
+    update.message.reply_text(content.collect_stats("Country/Region"))
 
 @log
 def history(update: Update, context: CallbackContext):

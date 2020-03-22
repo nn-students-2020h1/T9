@@ -174,3 +174,4 @@ $RECYCLE.BIN/
 *.log
 *.pickle
 *.db
+*.csv
