@@ -62,7 +62,7 @@ def collect_stats(location):
             infected.update({row[location]:row['Confirmed']})
             if len(infected) == 5:
                 break
-    stats = f'The most infected {location} on {actual.strftime("%d.%m.%Y")}:\n'
+    stats = f'The most infected {location.lower().split("/")[0].replace("y", "ie") + "s"} on {actual.strftime("%d.%m.%Y")}:\n'
     for key, value in infected.items():
         stats += (key + ': ' + value + '\n')
     return stats
