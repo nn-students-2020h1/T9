@@ -1,12 +1,12 @@
 from telegram import KeyboardButton, ReplyKeyboardMarkup
 
-BUTTON_HISTORY = "request history"
-BUTTON_QUOTES = "quote"
-BUTTON_FACT = "fact about cats"
-BUTTON_IMAGE = "cat photo"
-BUTTON_HELP = "help"
-BUTTON_CORONA_STATUS = " highest infection rate"
-BUTTON_COUNTRY_STATUS = "most infected country"
+BUTTON_HISTORY = "/history"
+BUTTON_QUOTES = "/quote"
+BUTTON_FACT = "/fact"
+BUTTON_IMAGE = "/cat"
+BUTTON_HELP = "/help"
+BUTTON_CORONA_STATUS = "/corono_stats"
+BUTTON_COUNTRY_STATUS = "/country_stats"
 
 
 def reply_keyboard():
