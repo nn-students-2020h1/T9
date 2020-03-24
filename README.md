@@ -23,9 +23,10 @@ If you wanted to start reading a new book, but didn 't knew how to choose it, th
 Want to get some cuteness? Use this command and the bot will show you a photo of a cute and funny cat.
 
 #### > /fact
-
+A little more cuteness. Use this command and get an interesting fact about cats.
 
 #### > /corono_stats
-
+More and more people are infected with the coronavirus every day. Use this command to find out which 5 provinces have the most new infections in the last 24 hours.
 
 #### > /country_stats
+This command will help you find out which country is currently the most infected.
