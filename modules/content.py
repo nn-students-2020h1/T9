@@ -46,7 +46,7 @@ def requestGit():
         data = actual.strftime("%m-%d-%Y")
         r = requests.get(f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
 
-    with open('virus.csv', 'w', newline='') as csvfile:
+    with open('virus.csv', 'w', newline='', encoding='utf-8') as csvfile:
         csvfile.writelines(r.text)
     return actual
 
@@ -54,7 +54,7 @@ def requestGit():
 def collect_stats(location):
     actual = requestGit()
     infected = {}
-    with open('virus.csv', 'r') as file:
+    with open('virus.csv', 'r', encoding='utf-8') as file:
         reader = csv.DictReader(file)
         for row in reader:
             if row[location] == '':
@@ -62,7 +62,7 @@ def collect_stats(location):
             infected.update({row[location]:row['Confirmed']})
             if len(infected) == 5:
                 break
-    stats = f'The most infected {location.lower().split("/")[0].replace("y", "ie") + "s"} on {actual.strftime("%d.%m.%Y")}:\n'
+    stats = f'The most infected {location.lower().split("_")[0].replace("y", "ie") + "s"} on {actual.strftime("%d.%m.%Y")}:\n'
     for key, value in infected.items():
         stats += (key + ': ' + value + '\n')
     return stats
