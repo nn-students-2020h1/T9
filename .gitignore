@@ -175,3 +175,8 @@ $RECYCLE.BIN/
 *.pickle
 *.db
 *.csv
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/T9.iml
+.idea/vcs.xml

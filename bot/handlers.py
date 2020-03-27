@@ -31,11 +31,11 @@ def chat_help(update: Update, context: CallbackContext):
 
 @log
 def corono_stats(update: Update, context: CallbackContext):
-    update.message.reply_text(content.collect_stats("Province/State"))
+    update.message.reply_text(content.collect_stats("Province_State"))
 
 @log
 def stats_country(update: Update, context: CallbackContext):
-    update.message.reply_text(content.collect_stats("Country/Region"))
+    update.message.reply_text(content.collect_stats("Country_Region"))
 
 @log
 def history(update: Update, context: CallbackContext):
