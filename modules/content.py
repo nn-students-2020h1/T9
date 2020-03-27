@@ -39,14 +39,16 @@ def getCatFact():
 def requestGit():
     actual = datetime.datetime.today()
     data = actual.strftime("%m-%d-%Y")
-    r = requests.get(f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
+    r = requests.get(
+        f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
     delta = datetime.timedelta(days=1)
     while r.status_code != 200:
         actual = actual - delta
         data = actual.strftime("%m-%d-%Y")
-        r = requests.get(f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
+        r = requests.get(
+            f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
 
-    with open('virus.csv', 'w', newline='') as csvfile:
+    with open('virus.csv', 'w', newline='', encoding='utf-8') as csvfile:
         csvfile.writelines(r.text)
     return actual
 
@@ -56,7 +58,8 @@ def collect_stats(location):
     infected = {}
     with open('virus.csv', 'r') as csvfile:
         reader = csv.DictReader(csvfile, delimiter=',')
-        sortedlist = sorted(reader, key=lambda row: int(row['Confirmed']), reverse=True)
+        sortedlist = sorted(reader, key=lambda row: int(
+            row['Confirmed']), reverse=True)
         for row in sortedlist:
             if row[location] == '':
                 continue
