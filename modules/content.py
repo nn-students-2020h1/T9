@@ -25,15 +25,15 @@ def get_quote():
     return text, author, book, person
 
 
-class CatsMethods:
+class Cat:
     @staticmethod
-    def get_cat_fact():
+    def get_fact():
         response = requests.get('https://cat-fact.herokuapp.com/facts/random')
         data = response.json()
         return data['text']
 
     @staticmethod
-    def get_cat_image():
+    def get_image():
         response = requests.get('https://api.thecatapi.com/v1/images/search')
         imgData = response.json()
         return imgData[0]["url"]
@@ -41,29 +41,41 @@ class CatsMethods:
 
 class CoronaStats:
     @staticmethod
-    def request_git():
+    def collect_stats(location):
+        actual = CoronaStats._actual_update()
+        infected = CoronaStats._read_table(location)
+        stats = \
+            f'The most infected {location.lower().split("_")[0].replace("y", "ie") + "s"} on {actual.strftime("%d.%m.%Y")}:\n'
+        for key, value in infected.items():
+            stats += (key + ': ' + value + '\n')
+        return stats
+
+    @staticmethod
+    def _actual_update():
         actual = datetime.datetime.today()
-        data = actual.strftime("%m-%d-%Y")
-        r = requests.get(
-            f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
+        r = CoronaStats._get_table(actual.strftime("%m-%d-%Y"))
         delta = datetime.timedelta(days=1)
         while r.status_code != 200:
             actual = actual - delta
-            data = actual.strftime("%m-%d-%Y")
-            r = requests.get(
-                f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
-
-        with open('virus.csv', 'w', newline='', encoding='utf-8') as csvfile:
-            csvfile.writelines(r.text)
+            r = CoronaStats._get_table(actual.strftime("%m-%d-%Y"))
+        CoronaStats._download_table(r)
         return actual
 
     @staticmethod
-    def collect_stats(location):
-        actual = CoronaStats.request_git()
+    def _get_table(data):
+        return requests.get(
+            f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
+
+    @staticmethod
+    def _download_table(r):
+        with open('virus.csv', 'w', newline='', encoding='utf-8') as csvfile:
+            csvfile.writelines(r.text)
+
+    @staticmethod
+    def _read_table(location):
         infected = {}
         with open('virus.csv', 'r') as csvfile:
-            reader = csv.DictReader(csvfile, delimiter=',')
-            sortedlist = sorted(reader, key=lambda row: int(
+            sortedlist = sorted(csv.DictReader(csvfile), key=lambda row: int(
                 row['Confirmed']), reverse=True)
             for row in sortedlist:
                 if row[location] == '':
@@ -71,7 +83,4 @@ class CoronaStats:
                 infected.update({row[location]: row['Confirmed']})
                 if len(infected) == 5:
                     break
-        stats = f'The most infected {location.lower().split("_")[0].replace("y", "ie") + "s"} on {actual.strftime("%d.%m.%Y")}:\n'
-        for key, value in infected.items():
-            stats += (key + ': ' + value + '\n')
-        return stats
+        return infected

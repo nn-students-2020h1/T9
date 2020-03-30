@@ -81,13 +81,13 @@ def send_quote(update: Update, context: CallbackContext):
 @log
 def send_cat_image(update: Update, context: CallbackContext):
     """Send a photo when the command /cat is issued."""
-    update.message.reply_photo(content.CatsMethods.get_cat_image())
+    update.message.reply_photo(content.Cat.get_image())
 
 
 @log
 def send_cat_fact(update: Update, context: CallbackContext):
     """Send a text when the command /fact is issued."""
-    update.message.reply_text(content.CatsMethods.get_cat_fact())
+    update.message.reply_text(content.Cat.get_fact())
 
 
 @log
