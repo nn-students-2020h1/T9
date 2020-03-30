@@ -57,9 +57,11 @@ def request_git():
 def collect_stats(location):
     actual = request_git()
     infected = {}
-    with open('virus.csv', 'r', encoding='utf-8') as file:
-        reader = csv.DictReader(file)
-        for row in reader:
+    with open('virus.csv', 'r') as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=',')
+        sortedlist = sorted(reader, key=lambda row: int(
+            row['Confirmed']), reverse=True)
+        for row in sortedlist:
             if row[location] == '':
                 continue
             infected.update({row[location]: row['Confirmed']})
