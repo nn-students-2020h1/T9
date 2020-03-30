@@ -1,16 +1,17 @@
-import datetime
 import csv
+import datetime
+
 import requests
 from bs4 import BeautifulSoup
 
 
-def getCatImage():
+def get_cat_image():
     response = requests.get('https://api.thecatapi.com/v1/images/search')
     imgData = response.json()
     return imgData[0]["url"]
 
 
-def getQuote():
+def get_quote():
     html = requests.get("https://icitaty.ru/random/").text
     soup = BeautifulSoup(html, "lxml")
 
@@ -30,21 +31,23 @@ def getQuote():
     return text, author, book, person
 
 
-def getCatFact():
+def get_cat_fact():
     response = requests.get('https://cat-fact.herokuapp.com/facts/random')
     data = response.json()
     return data['text']
 
 
-def requestGit():
+def request_git():
     actual = datetime.datetime.today()
     data = actual.strftime("%m-%d-%Y")
-    r = requests.get(f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
+    r = requests.get(
+        f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
     delta = datetime.timedelta(days=1)
     while r.status_code != 200:
         actual = actual - delta
         data = actual.strftime("%m-%d-%Y")
-        r = requests.get(f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
+        r = requests.get(
+            f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
 
     with open('virus.csv', 'w', newline='', encoding='utf-8') as csvfile:
         csvfile.writelines(r.text)
@@ -52,14 +55,14 @@ def requestGit():
 
 
 def collect_stats(location):
-    actual = requestGit()
+    actual = request_git()
     infected = {}
     with open('virus.csv', 'r', encoding='utf-8') as file:
         reader = csv.DictReader(file)
         for row in reader:
             if row[location] == '':
                 continue
-            infected.update({row[location]:row['Confirmed']})
+            infected.update({row[location]: row['Confirmed']})
             if len(infected) == 5:
                 break
     stats = f'The most infected {location.lower().split("_")[0].replace("y", "ie") + "s"} on {actual.strftime("%d.%m.%Y")}:\n'
