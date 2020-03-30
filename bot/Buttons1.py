@@ -11,19 +11,25 @@ TITLES = {
     RIGHTDOWNBUTTON: "FACT"
 }
 
+
 def inline_keyboard():
     keyboard = [
         [
-            InlineKeyboardButton(TITLES[LEFTUPBUTTON], callback_data=LEFTUPBUTTON),
-            InlineKeyboardButton(TITLES[RIGHTUPBUTTON], callback_data=RIGHTUPBUTTON)
+            InlineKeyboardButton(
+                TITLES[LEFTUPBUTTON], callback_data=LEFTUPBUTTON),
+            InlineKeyboardButton(
+                TITLES[RIGHTUPBUTTON], callback_data=RIGHTUPBUTTON)
         ],
         [
-            InlineKeyboardButton(TITLES[RIGHTDOWNBUTTON], callback_data=RIGHTDOWNBUTTON)
+            InlineKeyboardButton(
+                TITLES[RIGHTDOWNBUTTON], callback_data=RIGHTDOWNBUTTON)
         ]
     ]
     return InlineKeyboardMarkup(keyboard)
 
-#in process
+# in process
+
+
 def keyboard_callback(update: Update, context: CallbackContext):
     query = update.callback_query
     data = query.data
