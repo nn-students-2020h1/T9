@@ -54,12 +54,13 @@ def requestGit():
 def collect_stats(location):
     actual = requestGit()
     infected = {}
-    with open('virus.csv', 'r') as file:
-        reader = csv.DictReader(file)
-        for row in reader:
+    with open('virus.csv', 'r') as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=',')
+        sortedlist = sorted(reader, key=lambda row: int(row['Confirmed']), reverse=True)
+        for row in sortedlist:
             if row[location] == '':
                 continue
-            infected.update({row[location]:row['Confirmed']})
+            infected.update({row[location]: row['Confirmed']})
             if len(infected) == 5:
                 break
     stats = f'The most infected {location.lower().split("_")[0].replace("y", "ie") + "s"} on {actual.strftime("%d.%m.%Y")}:\n'
