@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackContext
+
 from bot.Buttons2 import reply_keyboard
 from bot.log import dataBase, log, logger
 from modules import content
@@ -8,11 +9,13 @@ from modules import content
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
 
+
 @log
 def start(update: Update, context: CallbackContext):
     """Send a message when the command /start is issued."""
     update.message.reply_text(
         f'Привет, {update.effective_user.first_name}!\nСписок команд: /help', reply_markup=reply_keyboard())
+
 
 @log
 def chat_help(update: Update, context: CallbackContext):
@@ -29,13 +32,16 @@ def chat_help(update: Update, context: CallbackContext):
 
     update.message.reply_text(msg)
 
+
 @log
 def corono_stats(update: Update, context: CallbackContext):
     update.message.reply_text(content.collect_stats("Province_State"))
 
+
 @log
 def stats_country(update: Update, context: CallbackContext):
     update.message.reply_text(content.collect_stats("Country_Region"))
+
 
 @log
 def history(update: Update, context: CallbackContext):
@@ -49,15 +55,17 @@ def history(update: Update, context: CallbackContext):
 
     update.message.reply_text(msg)
 
-@log
-def echo(update: Update, context: CallbackContext):
-   """Echo the user message."""
-   update.message.reply_text(update.message.text)
 
 @log
-def sendQuote(update: Update, context: CallbackContext):
+def echo(update: Update, context: CallbackContext):
+    """Echo the user message."""
+    update.message.reply_text(update.message.text)
+
+
+@log
+def send_quote(update: Update, context: CallbackContext):
     """Send a message when the command /quote is issued."""
-    text, author, book, person = content.getQuote()
+    text, author, book, person = content.get_quote()
     msg = text + '\n'
 
     if author:
@@ -69,15 +77,18 @@ def sendQuote(update: Update, context: CallbackContext):
 
     update.message.reply_text(msg)
 
-@log
-def sendCatImage(update: Update, context: CallbackContext):
-    """Send a photo when the command /cat is issued."""
-    update.message.reply_photo(content.getCatImage())
 
 @log
-def sendCatFact(update: Update, context: CallbackContext):
+def send_cat_image(update: Update, context: CallbackContext):
+    """Send a photo when the command /cat is issued."""
+    update.message.reply_photo(content.get_cat_image())
+
+
+@log
+def send_cat_fact(update: Update, context: CallbackContext):
     """Send a text when the command /fact is issued."""
-    update.message.reply_text(content.getCatFact())
+    update.message.reply_text(content.get_cat_fact())
+
 
 @log
 def error(update: Update, context: CallbackContext):

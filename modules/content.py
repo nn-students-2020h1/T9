@@ -1,16 +1,17 @@
-import datetime
 import csv
+import datetime
+
 import requests
 from bs4 import BeautifulSoup
 
 
-def getCatImage():
+def get_cat_image():
     response = requests.get('https://api.thecatapi.com/v1/images/search')
     imgData = response.json()
     return imgData[0]["url"]
 
 
-def getQuote():
+def get_quote():
     html = requests.get("https://icitaty.ru/random/").text
     soup = BeautifulSoup(html, "lxml")
 
@@ -30,13 +31,13 @@ def getQuote():
     return text, author, book, person
 
 
-def getCatFact():
+def get_cat_fact():
     response = requests.get('https://cat-fact.herokuapp.com/facts/random')
     data = response.json()
     return data['text']
 
 
-def requestGit():
+def request_git():
     actual = datetime.datetime.today()
     data = actual.strftime("%m-%d-%Y")
     r = requests.get(
@@ -54,7 +55,7 @@ def requestGit():
 
 
 def collect_stats(location):
-    actual = requestGit()
+    actual = request_git()
     infected = {}
     with open('virus.csv', 'r') as csvfile:
         reader = csv.DictReader(csvfile, delimiter=',')
