@@ -5,6 +5,7 @@ from telegram.ext import CallbackContext
 from bot.Buttons2 import reply_keyboard
 from bot.log import dataBase, log, logger
 from modules import content
+from modules.CovidTable import CovidTable
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
@@ -27,20 +28,38 @@ def chat_help(update: Update, context: CallbackContext):
     /quote - случайная цитата
     /cat - картинка котика
     /fact - популярный факт о котах
-    /corono_stats - список 5 провинций, где больше всего новых заражённых
+    /province_stats - список 5 провинций, где больше всего новых заражённых
     /country_stats - список 5 стран, где больше всего новых заражённых'''
 
     update.message.reply_text(msg)
 
 
 @log
-def corono_stats(update: Update, context: CallbackContext):
-    update.message.reply_text(content.collect_stats("Province_State"))
+def province_stats(update: Update, context: CallbackContext):
+    table = CovidTable()
+    date = table.get_table()
+    info = table.get_confirmed_top("Province_State")[:5]
+
+    msg = f"The most infected provinces on {date}:"
+
+    for x in info:
+        msg += f"\n{x[0]}:{x[1]}"
+
+    update.message.reply_text(msg)
 
 
 @log
-def stats_country(update: Update, context: CallbackContext):
-    update.message.reply_text(content.collect_stats("Country_Region"))
+def country_stats(update: Update, context: CallbackContext):
+    table = CovidTable()
+    date = table.get_table()
+    info = table.get_confirmed_top("Country_Region")[:5]
+
+    msg = f"The most infected provinces on {date}:"
+
+    for x in info:
+        msg += f"\n{x[0]}:{x[1]}"
+
+    update.message.reply_text(msg)
 
 
 @log

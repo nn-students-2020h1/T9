@@ -1,6 +1,3 @@
-import csv
-import datetime
-
 import requests
 from bs4 import BeautifulSoup
 
@@ -35,39 +32,3 @@ def get_cat_fact():
     response = requests.get('https://cat-fact.herokuapp.com/facts/random')
     data = response.json()
     return data['text']
-
-
-def request_git():
-    actual = datetime.datetime.today()
-    data = actual.strftime("%m-%d-%Y")
-    r = requests.get(
-        f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
-    delta = datetime.timedelta(days=1)
-    while r.status_code != 200:
-        actual = actual - delta
-        data = actual.strftime("%m-%d-%Y")
-        r = requests.get(
-            f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
-
-    with open('virus.csv', 'w', newline='', encoding='utf-8') as csvfile:
-        csvfile.writelines(r.text)
-    return actual
-
-
-def collect_stats(location):
-    actual = request_git()
-    infected = {}
-    with open('virus.csv', 'r') as csvfile:
-        reader = csv.DictReader(csvfile, delimiter=',')
-        sortedlist = sorted(reader, key=lambda row: int(
-            row['Confirmed']), reverse=True)
-        for row in sortedlist:
-            if row[location] == '':
-                continue
-            infected.update({row[location]: row['Confirmed']})
-            if len(infected) == 5:
-                break
-    stats = f'The most infected {location.lower().split("_")[0].replace("y", "ie") + "s"} on {actual.strftime("%d.%m.%Y")}:\n'
-    for key, value in infected.items():
-        stats += (key + ': ' + value + '\n')
-    return stats
