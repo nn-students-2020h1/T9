@@ -26,10 +26,10 @@ def chat_help(update: Update, context: CallbackContext):
     /help - помощь
     /history - история действий
     /quote - случайная цитата
-    /cat - картинка котика
-    /fact - популярный факт о котах
-    /province_stats - список 5 провинций, где больше всего новых заражённых
-    /country_stats - список 5 стран, где больше всего новых заражённых'''
+    /cat_image - картинка котика
+    /cat_fact - популярный факт о котах
+    /province_stats - список 5 провинций, где больше всего заражённых
+    /country_stats - список 5 стран, где больше всего заражённых'''
 
     update.message.reply_text(msg)
 

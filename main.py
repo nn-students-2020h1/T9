@@ -20,8 +20,8 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('help', chat_help))
     updater.dispatcher.add_handler(CommandHandler('history', history))
     updater.dispatcher.add_handler(CommandHandler('quote', send_quote))
-    updater.dispatcher.add_handler(CommandHandler('cat', send_cat_image))
-    updater.dispatcher.add_handler(CommandHandler('fact', send_cat_fact))
+    updater.dispatcher.add_handler(CommandHandler('cat_image', send_cat_image))
+    updater.dispatcher.add_handler(CommandHandler('cat_fact', send_cat_fact))
     updater.dispatcher.add_handler(
         CommandHandler('province_stats', province_stats))
     updater.dispatcher.add_handler(

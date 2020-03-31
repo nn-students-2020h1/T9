@@ -2,8 +2,8 @@ from telegram import KeyboardButton, ReplyKeyboardMarkup
 
 BUTTON_HISTORY = "/history"
 BUTTON_QUOTES = "/quote"
-BUTTON_FACT = "/fact"
-BUTTON_IMAGE = "/cat"
+BUTTON_FACT = "/cat_fact"
+BUTTON_IMAGE = "/cat_image"
 BUTTON_HELP = "/help"
 BUTTON_CORONA_STATUS = "/province_stats"
 BUTTON_COUNTRY_STATUS = "/country_stats"
