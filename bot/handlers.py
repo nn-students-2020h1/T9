@@ -28,8 +28,8 @@ def chat_help(update: Update, context: CallbackContext):
     /quote - случайная цитата
     /cat_image - картинка котика
     /cat_fact - популярный факт о котах
-    /province_stats - список 5 провинций, где больше всего заражённых
-    /country_stats - список 5 стран, где больше всего заражённых'''
+    /province_stats - топ 5 провинций по кол-ву заражённых
+    /country_stats - топ 5 стран по кол-ву заражённых'''
 
     update.message.reply_text(msg)
 
@@ -82,20 +82,20 @@ def echo(update: Update, context: CallbackContext):
 
 
 @log
-def send_quote(update: Update, context: CallbackContext):
+def quote(update: Update, context: CallbackContext):
     """Send a message when the command /quote is issued."""
-    quote = Quote()
-    update.message.reply_text(quote.get_text())
+    msg = Quote()
+    update.message.reply_text(msg.get_text())
 
 
 @log
-def send_cat_image(update: Update, context: CallbackContext):
+def cat_image(update: Update, context: CallbackContext):
     """Send a photo when the command /cat is issued."""
     update.message.reply_photo(Cat.get_image())
 
 
 @log
-def send_cat_fact(update: Update, context: CallbackContext):
+def cat_fact(update: Update, context: CallbackContext):
     """Send a text when the command /fact is issued."""
     update.message.reply_text(Cat.get_fact())
 

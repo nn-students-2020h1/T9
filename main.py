@@ -4,9 +4,8 @@ from telegram.ext import (CallbackQueryHandler, CommandHandler, Filters,
                           MessageHandler, Updater)
 
 from bot.Buttons1 import keyboard_callback
-from bot.handlers import (chat_help, country_stats, echo, error, history,
-                          province_stats, send_cat_fact, send_cat_image,
-                          send_quote, start)
+from bot.handlers import (cat_fact, cat_image, chat_help, country_stats, echo,
+                          error, history, province_stats, quote, start)
 from bot.log import logger
 from bot.setup import PROXY, TOKEN
 
@@ -19,9 +18,9 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('help', chat_help))
     updater.dispatcher.add_handler(CommandHandler('history', history))
-    updater.dispatcher.add_handler(CommandHandler('quote', send_quote))
-    updater.dispatcher.add_handler(CommandHandler('cat_image', send_cat_image))
-    updater.dispatcher.add_handler(CommandHandler('cat_fact', send_cat_fact))
+    updater.dispatcher.add_handler(CommandHandler('quote', quote))
+    updater.dispatcher.add_handler(CommandHandler('cat_image', cat_image))
+    updater.dispatcher.add_handler(CommandHandler('cat_fact', cat_fact))
     updater.dispatcher.add_handler(
         CommandHandler('province_stats', province_stats))
     updater.dispatcher.add_handler(
