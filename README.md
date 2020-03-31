@@ -29,3 +29,6 @@ More and more people are infected with the coronavirus every day. Use this comma
 
 #### > /country_stats
 This command will help you find out which country is currently the most infected.
+
+#### > /meme
+Use this command to get a random meme. Attention! It can be offensive.
