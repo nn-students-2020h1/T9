@@ -5,25 +5,9 @@ from io import StringIO
 import requests
 
 
-class CovidTable():
+class CsvTable():
     def __init__(self):
         self.table = []
-
-    def get_table(self, date=datetime.datetime.today()):
-        while True:
-            str_date = date.strftime("%m-%d-%Y")
-            url = f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{str_date}.csv"
-            response = requests.get(url)
-
-            if response.status_code == 200:
-                for line in csv.DictReader(StringIO(response.text)):
-                    row = {}
-                    for key in line.keys():
-                        row[key] = line[key]
-                    self.table.append(row)
-                return str_date
-            else:
-                date -= datetime.timedelta(days=1)
 
     def save_table(self, file_name):
         with open(file_name, 'w', newline='', encoding='utf-8') as csvfile:
@@ -39,6 +23,24 @@ class CovidTable():
                 for key in line.keys():
                     row[key] = line[key]
                 self.table.append(row)
+
+
+class CovidTable(CsvTable):
+    def get_table(self, date=datetime.datetime.today()):
+        while True:
+            str_date = date.strftime("%m-%d-%Y")
+            url = f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{str_date}.csv"
+            response = requests.get(url)
+
+            if response.status_code == 200:
+                for line in csv.DictReader(StringIO(response.text)):
+                    row = {}
+                    for key in line.keys():
+                        row[key] = line[key]
+                    self.table.append(row)
+                return str_date
+            else:
+                date -= datetime.timedelta(days=1)
 
     def get_confirmed_top(self, location):
         info = [(line[location], int(line["Confirmed"]))
