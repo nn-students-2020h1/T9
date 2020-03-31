@@ -1,3 +1,5 @@
+import random
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -60,6 +62,9 @@ class Quote():
         return self.get_text()
 
 
-if __name__ == "__main__":
-    # print(Cat.get_fact())
-    print(Quote())
+def get_random_meme():
+    # https://memasik.ru//memesimages/meme88157.jpg
+    # методом перебора была найдена ссылка на последнюю картинку
+    # было крайне сложно найти такой источник
+    id = random.randint(1, 88157)
+    return f"https://memasik.ru//memesimages/meme{id}.jpg"
