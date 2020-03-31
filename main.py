@@ -3,7 +3,6 @@ from telegram import Bot
 from telegram.ext import (CallbackQueryHandler, CommandHandler, Filters,
                           MessageHandler, Updater)
 
-from bot.Buttons1 import keyboard_callback
 from bot.handlers import (cat_fact, cat_image, chat_help, country_stats, echo,
                           error, history, province_stats, quote, start)
 from bot.log import logger
@@ -26,9 +25,6 @@ def main():
     updater.dispatcher.add_handler(
         CommandHandler('country_stats', country_stats))
 
-    # keyboard
-    updater.dispatcher.add_handler(CallbackQueryHandler(
-        callback=keyboard_callback, pass_chat_data=True))
     # on noncommand i.e message - echo the message on Telegram
     updater.dispatcher.add_handler(MessageHandler(Filters.text, echo))
 

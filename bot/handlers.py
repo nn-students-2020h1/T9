@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import Update
 from telegram.ext import CallbackContext
 
-from bot.Buttons2 import reply_keyboard
+from bot.keyboard import reply_keyboard
 from bot.log import dataBase, log, logger
 from modules.content import Cat, Quote
 from modules.CovidTable import CovidTable
