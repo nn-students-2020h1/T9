@@ -15,17 +15,15 @@ def reply_keyboard():
         [
             KeyboardButton(BUTTON_HELP),
             KeyboardButton(BUTTON_HISTORY),
+            KeyboardButton(BUTTON_QUOTE),
         ],
         [
             KeyboardButton(BUTTON_COUNTRY_STATS),
             KeyboardButton(BUTTON_PROVINCE_STATS),
         ],
         [
-            KeyboardButton(BUTTON_QUOTE),
-            KeyboardButton(BUTTON_CAT_FACT),
-        ],
-        [
             KeyboardButton(BUTTON_CAT_IMAGE),
+            KeyboardButton(BUTTON_CAT_FACT),
             KeyboardButton(BUTTON_MEME),
         ],
     ]

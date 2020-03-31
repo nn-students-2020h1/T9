@@ -46,6 +46,8 @@ def province_stats(update: Update, context: CallbackContext):
     for x in info:
         msg += f"\n{x[0]}:{x[1]}"
 
+    msg += "\n\nSee more on our website:\nhttps://bitlowsky.github.io/covid-19-info/"
+
     update.message.reply_text(msg)
 
 
@@ -59,6 +61,8 @@ def country_stats(update: Update, context: CallbackContext):
 
     for x in info:
         msg += f"\n{x[0]}:{x[1]}"
+
+    msg += "\n\nSee more on our website:\nhttps://bitlowsky.github.io/covid-19-info/"
 
     update.message.reply_text(msg)
 
