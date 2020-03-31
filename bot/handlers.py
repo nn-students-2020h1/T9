@@ -4,7 +4,7 @@ from telegram.ext import CallbackContext
 
 from bot.Buttons2 import reply_keyboard
 from bot.log import dataBase, log, logger
-from modules import content
+from modules.content import Cat, Quote
 from modules.CovidTable import CovidTable
 
 # Define a few command handlers. These usually take the two arguments update and
@@ -54,7 +54,7 @@ def country_stats(update: Update, context: CallbackContext):
     date = table.get_table()
     info = table.get_confirmed_top("Country_Region")[:5]
 
-    msg = f"The most infected provinces on {date}:"
+    msg = f"The most infected countries on {date}:"
 
     for x in info:
         msg += f"\n{x[0]}:{x[1]}"
@@ -84,29 +84,20 @@ def echo(update: Update, context: CallbackContext):
 @log
 def send_quote(update: Update, context: CallbackContext):
     """Send a message when the command /quote is issued."""
-    text, author, book, person = content.get_quote()
-    msg = text + '\n'
-
-    if author:
-        msg += f"\nАвтор: {author}"
-    if book:
-        msg += f"\nКнига: {book}"
-    if person:
-        msg += f"\nПерсонаж: {person}"
-
-    update.message.reply_text(msg)
+    quote = Quote()
+    update.message.reply_text(quote.get_text())
 
 
 @log
 def send_cat_image(update: Update, context: CallbackContext):
     """Send a photo when the command /cat is issued."""
-    update.message.reply_photo(content.get_cat_image())
+    update.message.reply_photo(Cat.get_image())
 
 
 @log
 def send_cat_fact(update: Update, context: CallbackContext):
     """Send a text when the command /fact is issued."""
-    update.message.reply_text(content.get_cat_fact())
+    update.message.reply_text(Cat.get_fact())
 
 
 @log
