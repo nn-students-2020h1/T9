@@ -1,86 +1,70 @@
-import csv
-import datetime
+import random
 
 import requests
 from bs4 import BeautifulSoup
 
 
-def get_quote():
-    html = requests.get("https://icitaty.ru/random/").text
-    soup = BeautifulSoup(html, "lxml")
-
-    text = soup.find("p").text
-    author = soup.find("a", attrs={"title": "Автор цитаты"})
-    book = soup.find("a", attrs={"title": "Цитаты из книги"})
-    person = soup.find("a", attrs={"title": "Цитируемый персонаж"})
-
-    author = str(author)[str(author).find("</i>") + 4:str(author).find("</a>")]
-    book = str(book)[str(book).find("</i>") + 4:str(book).find("</a>")]
-    person = str(person)[str(person).find("</i>") + 4:str(person).find("</a>")]
-
-    author = ' '.join(author.split())
-    book = ' '.join(book.split())
-    person = ' '.join(person.split())
-
-    return text, author, book, person
-
-
-class Cat:
-    @staticmethod
-    def get_fact():
-        response = requests.get('https://cat-fact.herokuapp.com/facts/random')
-        data = response.json()
-        return data['text']
+class Cat():
+    IMAGE_URL = 'https://api.thecatapi.com/v1/images/search'
+    FACT_URL = 'https://cat-fact.herokuapp.com/facts/random'
 
     @staticmethod
     def get_image():
-        response = requests.get('https://api.thecatapi.com/v1/images/search')
-        imgData = response.json()
-        return imgData[0]["url"]
-
-
-class CoronaStats:
-    @staticmethod
-    def collect_stats(location):
-        actual = CoronaStats._actual_update()
-        infected = CoronaStats._read_table(location)
-        stats = \
-            f'The most infected {location.lower().split("_")[0].replace("y", "ie") + "s"} on {actual.strftime("%d.%m.%Y")}:\n'
-        for key, value in infected.items():
-            stats += (key + ': ' + value + '\n')
-        return stats
+        response = requests.get(Cat.IMAGE_URL)
+        data = response.json()
+        return data[0]["url"]
 
     @staticmethod
-    def _actual_update():
-        actual = datetime.datetime.today()
-        r = CoronaStats._get_table(actual.strftime("%m-%d-%Y"))
-        delta = datetime.timedelta(days=1)
-        while r.status_code != 200:
-            actual = actual - delta
-            r = CoronaStats._get_table(actual.strftime("%m-%d-%Y"))
-        CoronaStats._download_table(r)
-        return actual
+    def get_fact():
+        response = requests.get(Cat.FACT_URL)
+        data = response.json()
+        return data['text']
 
-    @staticmethod
-    def _get_table(data):
-        return requests.get(
-            f"https://raw.github.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{data}.csv")
 
-    @staticmethod
-    def _download_table(r):
-        with open('virus.csv', 'w', newline='', encoding='utf-8') as csvfile:
-            csvfile.writelines(r.text)
+class Quote():
+    URL = "https://icitaty.ru/random/"
 
-    @staticmethod
-    def _read_table(location):
-        infected = {}
-        with open('virus.csv', 'r') as csvfile:
-            sortedlist = sorted(csv.DictReader(csvfile), key=lambda row: int(
-                row['Confirmed']), reverse=True)
-            for row in sortedlist:
-                if row[location] == '':
-                    continue
-                infected.update({row[location]: row['Confirmed']})
-                if len(infected) == 5:
-                    break
-        return infected
+    def __init__(self):
+        self.get_random_quote()
+
+    def get_random_quote(self):
+        html = requests.get(Quote.URL).text
+        soup = BeautifulSoup(html, "lxml")
+
+        self.text = soup.find("p").text
+        author = soup.find("a", attrs={"title": "Автор цитаты"})
+        book = soup.find("a", attrs={"title": "Цитаты из книги"})
+        person = soup.find("a", attrs={"title": "Цитируемый персонаж"})
+
+        author = str(author)[str(author).find(
+            "</i>") + 4:str(author).find("</a>")]
+        book = str(book)[str(book).find("</i>") + 4:str(book).find("</a>")]
+        person = str(person)[str(person).find(
+            "</i>") + 4:str(person).find("</a>")]
+
+        self.author = ' '.join(author.split())
+        self.book = ' '.join(book.split())
+        self.person = ' '.join(person.split())
+
+    def get_text(self):
+        msg = self.text + '\n'
+
+        if self.author:
+            msg += f"\nАвтор: {self.author}"
+        if self.book:
+            msg += f"\nКнига: {self.book}"
+        if self.person:
+            msg += f"\nПерсонаж: {self.person}"
+
+        return msg
+
+    def __str__(self):
+        return self.get_text()
+
+
+def get_random_meme():
+    # https://memasik.ru//memesimages/meme88157.jpg
+    # методом перебора была найдена ссылка на последнюю картинку
+    # было крайне сложно найти такой источник
+    id = random.randint(1, 88157)
+    return f"https://memasik.ru//memesimages/meme{id}.jpg"
