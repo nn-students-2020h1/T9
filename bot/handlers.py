@@ -4,7 +4,7 @@ from telegram.ext import CallbackContext
 
 from bot.keyboard import reply_keyboard
 from bot.log import dataBase, log, logger
-from modules.content import Cat, Quote
+from modules.content import Cat, Quote, get_random_meme
 from modules.CovidTable import CovidTable
 
 # Define a few command handlers. These usually take the two arguments update and
@@ -29,7 +29,8 @@ def chat_help(update: Update, context: CallbackContext):
     /cat_image - картинка котика
     /cat_fact - популярный факт о котах
     /province_stats - топ 5 провинций по кол-ву заражённых
-    /country_stats - топ 5 стран по кол-ву заражённых'''
+    /country_stats - топ 5 стран по кол-ву заражённых
+    /meme - случайный мем (16+)'''
 
     update.message.reply_text(msg)
 
@@ -90,14 +91,20 @@ def quote(update: Update, context: CallbackContext):
 
 @log
 def cat_image(update: Update, context: CallbackContext):
-    """Send a photo when the command /cat is issued."""
+    """Send a photo when the command /cat_image is issued."""
     update.message.reply_photo(Cat.get_image())
 
 
 @log
 def cat_fact(update: Update, context: CallbackContext):
-    """Send a text when the command /fact is issued."""
+    """Send a text when the command /cat_fact is issued."""
     update.message.reply_text(Cat.get_fact())
+
+
+@log
+def meme(update: Update, context: CallbackContext):
+    """Send a photo when the command /meme is issued."""
+    update.message.reply_photo(get_random_meme())
 
 
 @log

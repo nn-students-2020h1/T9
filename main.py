@@ -4,7 +4,7 @@ from telegram.ext import (CallbackQueryHandler, CommandHandler, Filters,
                           MessageHandler, Updater)
 
 from bot.handlers import (cat_fact, cat_image, chat_help, country_stats, echo,
-                          error, history, province_stats, quote, start)
+                          error, history, meme, province_stats, quote, start)
 from bot.log import logger
 from bot.setup import PROXY, TOKEN
 
@@ -20,6 +20,7 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('quote', quote))
     updater.dispatcher.add_handler(CommandHandler('cat_image', cat_image))
     updater.dispatcher.add_handler(CommandHandler('cat_fact', cat_fact))
+    updater.dispatcher.add_handler(CommandHandler('meme', meme))
     updater.dispatcher.add_handler(
         CommandHandler('province_stats', province_stats))
     updater.dispatcher.add_handler(
