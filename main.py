@@ -3,8 +3,9 @@ from telegram import Bot
 from telegram.ext import (CallbackQueryHandler, CommandHandler, Filters,
                           MessageHandler, Updater)
 
-from bot.handlers import (cat_fact, cat_image, chat_help, country_stats, echo,
-                          error, history, meme, province_stats, quote, start)
+from bot.handlers import (cat_fact, cat_image, chat_help, country_dynamic,
+                          country_stats, echo, error, history, meme,
+                          province_dynamic, province_stats, quote, start)
 from bot.log import logger
 from bot.setup import PROXY, TOKEN
 
@@ -22,9 +23,13 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('cat_fact', cat_fact))
     updater.dispatcher.add_handler(CommandHandler('meme', meme))
     updater.dispatcher.add_handler(
+        CommandHandler('country_stats', country_stats))
+    updater.dispatcher.add_handler(
+        CommandHandler('country_dynamic', country_dynamic))
+    updater.dispatcher.add_handler(
         CommandHandler('province_stats', province_stats))
     updater.dispatcher.add_handler(
-        CommandHandler('country_stats', country_stats))
+        CommandHandler('province_dynamic', province_dynamic))
 
     # on noncommand i.e message - echo the message on Telegram
     updater.dispatcher.add_handler(MessageHandler(Filters.text, echo))

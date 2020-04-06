@@ -6,8 +6,10 @@ BUTTON_QUOTE = "/quote"
 BUTTON_CAT_FACT = "/cat_fact"
 BUTTON_CAT_IMAGE = "/cat_image"
 BUTTON_MEME = "/meme"
-BUTTON_PROVINCE_STATS = "/province_stats"
 BUTTON_COUNTRY_STATS = "/country_stats"
+BUTTON_COUNTRY_DYNAMIC = "/country_dynamic"
+BUTTON_PROVINCE_STATS = "/province_stats"
+BUTTON_PROVINCE_DYNAMIC = "/province_dynamic"
 
 
 def reply_keyboard():
@@ -20,6 +22,10 @@ def reply_keyboard():
         [
             KeyboardButton(BUTTON_COUNTRY_STATS),
             KeyboardButton(BUTTON_PROVINCE_STATS),
+        ],
+        [
+            KeyboardButton(BUTTON_COUNTRY_DYNAMIC),
+            KeyboardButton(BUTTON_PROVINCE_DYNAMIC),
         ],
         [
             KeyboardButton(BUTTON_CAT_IMAGE),
