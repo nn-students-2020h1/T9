@@ -5,7 +5,6 @@ from telegram.ext import CallbackContext
 from bot.keyboard import reply_keyboard
 from bot.log import dataBase, log, logger
 from modules.content import Cat, Quote, get_random_meme
-from modules.CovidTable import CovidTable
 from modules.covid import CovidInfo
 
 # Define a few command handlers. These usually take the two arguments update and
@@ -31,21 +30,24 @@ def chat_help(update: Update, context: CallbackContext):
     /cat_fact - популярный факт о котах
     /province_stats - топ 5 провинций по кол-ву заражённых
     /country_stats - топ 5 стран по кол-ву заражённых
-    /meme - случайный мем (16+)'''
+    /meme - случайный мем (16+)
+    /country_dynamic - динамика заражений по странам
+    /province_dynamic - динамика заражений по регионам'''
 
     update.message.reply_text(msg)
 
 
 @log
 def country_stats(update: Update, context: CallbackContext):
-    table = CovidTable()
-    date = table.get_table()
-    info = table.get_confirmed_top("Country_Region")[:5]
+    data = CovidInfo.get_country_top()
+    lines = 0
 
-    msg = f"The most infected countries on {date}:"
-
-    for x in info:
-        msg += f"\n{x[0]}:{x[1]}"
+    msg = "Latest info about the most infected countries:"
+    for x in data:
+        msg += f'\n{x["countryregion"]}: {x["confirmed"]}'
+        lines += 1
+        if lines == 5:
+            break
 
     msg += "\n\nSee more on our website:\nhttps://bitlowsky.github.io/covid-19-info/"
 
@@ -60,19 +62,22 @@ def country_dynamic(update: Update, context: CallbackContext):
     for country in data:
         msg += f'\n{country["countryregion"]} ({country["lastdynamic"]} | {country["prevdynamic"]})'
 
+    msg += "\n\nSee more on our website:\nhttps://bitlowsky.github.io/covid-19-info/"
+
     update.message.reply_text(msg)
 
 
 @log
 def province_stats(update: Update, context: CallbackContext):
-    table = CovidTable()
-    date = table.get_table()
-    info = table.get_confirmed_top("Province_State")[:5]
+    data = CovidInfo.get_province_top()
+    lines = 0
 
-    msg = f"The most infected provinces on {date}:"
-
-    for x in info:
-        msg += f"\n{x[0]}:{x[1]}"
+    msg = "Latest info about the most infected provinces:"
+    for x in data:
+        msg += f'\n{x["provincestate"]}, {x["countryregion"]}: {x["confirmed"]}'
+        lines += 1
+        if lines == 5:
+            break
 
     msg += "\n\nSee more on our website:\nhttps://bitlowsky.github.io/covid-19-info/"
 
@@ -86,6 +91,8 @@ def province_dynamic(update: Update, context: CallbackContext):
 
     for province in data:
         msg += f'\n{province["provincestate"]}, {province["countryregion"]} ({province["lastdynamic"]} | {province["prevdynamic"]})'
+
+    msg += "\n\nSee more on our website:\nhttps://bitlowsky.github.io/covid-19-info/"
 
     update.message.reply_text(msg)
 

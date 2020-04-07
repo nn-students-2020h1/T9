@@ -9,7 +9,8 @@ class CovidInfo:
 
     @staticmethod
     def get_country_top():
-        data = CovidInfo.__get_data(CovidInfo.LATEST_URL)
+        data = CovidInfo.__get_data(
+            CovidInfo.LATEST_URL + "?onlyCountries=true")
         return sorted(data, key=lambda country: country["confirmed"], reverse=True)
 
     @staticmethod
@@ -78,3 +79,8 @@ class CovidInfo:
     def __get_data(URL):
         response = requests.get(URL)
         return response.json()
+
+
+if __name__ == "__main__":
+    data = CovidInfo.get_country_top()
+    print(data)
