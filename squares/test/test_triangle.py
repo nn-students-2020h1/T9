@@ -37,5 +37,33 @@ class TestFigureSquares(unittest.TestCase):
         with self.assertRaises(TypeError):
             triangle.square()
 
+    def test_square_exist(self):
+        triangle = Triangle(1, 1)
+        self.assertTrue(triangle.square())
+
+    def test_is_square(self):
+        triangle = Triangle(1, 2)
+        square = 1
+        self.assertTrue(square, triangle.square())
+
+    def test_triangle_data(self):
+        triangle = Triangle(1, 2)
+        self.assertIn(triangle.h, [1, 2, 3])
+
+    def test_traingle_None(self):
+        triangle = Triangle(1, 2)
+        self.assertIsNotNone(triangle)
+
+    def test_square_is_float(self):
+        triangle = Triangle(5, 10)
+        self.assertIsInstance(triangle.square(), float)
+
+    def test_warns(self):
+        with self.assertWarns(Warning):
+            self.triangle.sides()
+
+
+
+
 if __name__ == '__main__':
     unittest.main()
