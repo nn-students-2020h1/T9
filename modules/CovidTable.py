@@ -26,6 +26,8 @@ class CsvTable():
 
 
 class CovidTable(CsvTable):
+    '''deprecated'''
+
     def get_table(self, date=datetime.datetime.today()):
         while True:
             str_date = date.strftime("%m-%d-%Y")
