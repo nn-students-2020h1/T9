@@ -10,15 +10,23 @@ class Cat():
 
     @staticmethod
     def get_image():
-        response = requests.get(Cat.IMAGE_URL)
-        data = response.json()
-        return data[0]["url"]
+        try:
+            response = requests.get(Cat.IMAGE_URL)
+            if response.ok:
+                data = response.json()
+                return data[0]["url"]
+        except Exception as err:
+            print(f'Error occurred: {err}')
 
     @staticmethod
     def get_fact():
-        response = requests.get(Cat.FACT_URL)
-        data = response.json()
-        return data['text']
+        try:
+            response = requests.get(Cat.FACT_URL)
+            if response.ok:
+                data = response.json()
+                return data['text']
+        except Exception as err:
+            print(f'Error occurred: {err}')
 
 
 class Quote():
