@@ -2,9 +2,9 @@
 from telegram import Update
 from telegram.ext import CallbackContext
 
-from bot.keyboard import reply_keyboard
+from bot.keyboard import content_keyboard, covid_keyboard, main_keyboard
 from bot.log import dataBase, log, logger
-from modules.content import Cat, get_random_meme, CovidInfo
+from modules.content import Cat, CovidInfo, get_random_meme
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
@@ -14,7 +14,28 @@ from modules.content import Cat, get_random_meme, CovidInfo
 def start(update: Update, context: CallbackContext):
     """Send a message when the command /start is issued."""
     update.message.reply_text(
-        f'Привет, {update.effective_user.first_name}!\nСписок команд: /help', reply_markup=reply_keyboard())
+        f'Привет, {update.effective_user.first_name}!', reply_markup=main_keyboard())
+
+
+@log
+def main_menu(update: Update, context: CallbackContext):
+    """Send a message when the command /main is issued."""
+    update.message.reply_text(
+        'You are back in the main menu.', reply_markup=main_keyboard())
+
+
+@log
+def covid_menu(update: Update, context: CallbackContext):
+    """Send a message when the command /covid is issued."""
+    update.message.reply_text(
+        "You have entered the covid menu.", reply_markup=covid_keyboard())
+
+
+@log
+def content_menu(update: Update, context: CallbackContext):
+    """Send a message when the command /content is issued."""
+    update.message.reply_text(
+        "You have entered the content menu.", reply_markup=content_keyboard())
 
 
 @log
@@ -24,14 +45,16 @@ def chat_help(update: Update, context: CallbackContext):
     /start - начало
     /help - помощь
     /history - история действий
-    /quote - случайная цитата
+
     /cat_image - картинка котика
     /cat_fact - популярный факт о котах
-    /province_stats - топ 5 провинций по кол-ву заражённых
-    /country_stats - топ 5 стран по кол-ву заражённых
     /meme - случайный мем (16+)
+    
+    /country_stats - топ 5 стран по кол-ву заражённых
+    /province_stats - топ 5 провинций по кол-ву заражённых
     /country_dynamic - динамика заражений по странам
-    /province_dynamic - динамика заражений по регионам'''
+    /province_dynamic - динамика заражений по регионам
+    '''
 
     update.message.reply_text(msg)
 

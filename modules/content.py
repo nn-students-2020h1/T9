@@ -26,7 +26,7 @@ class Cat():
 
     @staticmethod
     def get_fact():
-        data = get_json(Cat.IMAGE_URL)
+        data = get_json(Cat.FACT_URL)
         if data:
             return data['text']
 

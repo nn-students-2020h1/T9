@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from telegram import Bot
-from telegram.ext import (CommandHandler, Filters,
-                          MessageHandler, Updater)
+from telegram.ext import CommandHandler, Filters, MessageHandler, Updater
 
-from bot.handlers import (cat_fact, cat_image, chat_help, country_dynamic,
-                          country_stats, echo, error, history, meme,
-                          province_dynamic, province_stats, start)
+from bot.handlers import (cat_fact, cat_image, chat_help, content_menu,
+                          country_dynamic, country_stats, covid_menu, echo,
+                          error, history, main_menu, meme, province_dynamic,
+                          province_stats, start)
 from bot.log import logger
 from bot.setup import PROXY, TOKEN
 
@@ -15,12 +15,18 @@ def main():
     updater = Updater(bot=bot, use_context=True)
 
     # on different commands - answer in Telegram
+    updater.dispatcher.add_handler(CommandHandler('main', main_menu))
+    updater.dispatcher.add_handler(CommandHandler('covid', covid_menu))
+    updater.dispatcher.add_handler(CommandHandler('content', content_menu))
+
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('help', chat_help))
     updater.dispatcher.add_handler(CommandHandler('history', history))
+
     updater.dispatcher.add_handler(CommandHandler('cat_image', cat_image))
     updater.dispatcher.add_handler(CommandHandler('cat_fact', cat_fact))
     updater.dispatcher.add_handler(CommandHandler('meme', meme))
+
     updater.dispatcher.add_handler(
         CommandHandler('country_stats', country_stats))
     updater.dispatcher.add_handler(
