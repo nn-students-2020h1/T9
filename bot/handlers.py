@@ -4,7 +4,7 @@ from telegram.ext import CallbackContext
 
 from bot.keyboard import reply_keyboard
 from bot.log import dataBase, log, logger
-from modules.content import Cat, Quote, get_random_meme
+from modules.content import Cat, get_random_meme
 from modules.covid import CovidInfo
 
 # Define a few command handlers. These usually take the two arguments update and
@@ -114,13 +114,6 @@ def history(update: Update, context: CallbackContext):
 def echo(update: Update, context: CallbackContext):
     """Echo the user message."""
     update.message.reply_text(update.message.text)
-
-
-@log
-def quote(update: Update, context: CallbackContext):
-    """Send a message when the command /quote is issued."""
-    msg = Quote()
-    update.message.reply_text(msg.get_text())
 
 
 @log
