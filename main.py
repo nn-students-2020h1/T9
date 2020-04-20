@@ -4,8 +4,8 @@ from telegram.ext import CommandHandler, Filters, MessageHandler, Updater
 
 from bot.handlers import (cat_fact, cat_image, chat_help, content_menu,
                           country_dynamic, country_stats, covid_menu, echo,
-                          error, history, main_menu, meme, province_dynamic,
-                          province_stats, start)
+                          error, history, image_recognition, main_menu, meme,
+                          province_dynamic, province_stats, start)
 from bot.log import logger
 from bot.setup import PROXY, TOKEN
 
@@ -38,6 +38,8 @@ def main():
 
     # on noncommand i.e message - echo the message on Telegram
     updater.dispatcher.add_handler(MessageHandler(Filters.text, echo))
+    updater.dispatcher.add_handler(
+        MessageHandler(Filters.photo, image_recognition))
 
     # log all errors
     updater.dispatcher.add_error_handler(error)

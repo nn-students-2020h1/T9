@@ -4,7 +4,7 @@ from telegram.ext import CallbackContext
 
 from bot.keyboard import content_keyboard, covid_keyboard, main_keyboard
 from bot.log import dataBase, log, logger
-from modules.content import Cat, CovidInfo, get_random_meme
+from modules.content import Cat, CovidInfo, get_image_tags, get_random_meme
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
@@ -136,6 +136,13 @@ def history(update: Update, context: CallbackContext):
 def echo(update: Update, context: CallbackContext):
     """Echo the user message."""
     update.message.reply_text(update.message.text)
+
+
+@log
+def image_recognition(update: Update, context: CallbackContext):
+    image_url = update.message.photo[-1].get_file().file_path
+    msg = "На картинке:\n*" + "\n*".join(get_image_tags(image_url))
+    update.message.reply_text(msg)
 
 
 @log

@@ -67,3 +67,11 @@ def get_random_meme():
 
     except Exception as err:
         print(f'Error occurred: {err}')
+
+
+def get_image_tags(image_url):
+    ENTRY_POINT = "https://bitlowsky-api.herokuapp.com/image-recognition"
+    url = ENTRY_POINT + f"?url={image_url}"
+    data = get_json(url)
+    if data:
+        return data["tags"]
