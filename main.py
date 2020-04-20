@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from telegram import Bot
-from telegram.ext import (CallbackQueryHandler, CommandHandler, Filters,
+from telegram.ext import (CommandHandler, Filters,
                           MessageHandler, Updater)
 
 from bot.handlers import (cat_fact, cat_image, chat_help, country_dynamic,
                           country_stats, echo, error, history, meme,
-                          province_dynamic, province_stats, quote, start)
+                          province_dynamic, province_stats, start)
 from bot.log import logger
 from bot.setup import PROXY, TOKEN
 
@@ -18,7 +18,6 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('help', chat_help))
     updater.dispatcher.add_handler(CommandHandler('history', history))
-    updater.dispatcher.add_handler(CommandHandler('quote', quote))
     updater.dispatcher.add_handler(CommandHandler('cat_image', cat_image))
     updater.dispatcher.add_handler(CommandHandler('cat_fact', cat_fact))
     updater.dispatcher.add_handler(CommandHandler('meme', meme))
