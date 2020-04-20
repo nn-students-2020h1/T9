@@ -29,8 +29,15 @@ class Cat():
 
 
 def get_random_meme():
-    # https://memasik.ru//memesimages/meme88157.jpg
-    # методом перебора была найдена ссылка на последнюю картинку
-    # было крайне сложно найти такой источник
-    id = random.randint(1, 88157)
-    return f"https://memasik.ru//memesimages/meme{id}.jpg"
+    URL = "https://bitlowsky-api.herokuapp.com/meme/"
+    try:
+        response = requests.get(URL)
+
+        if response.ok:
+            return response.text
+
+        else:
+            return "Не сегодня..."
+
+    except Exception as err:
+        print(f'Error occurred: {err}')
