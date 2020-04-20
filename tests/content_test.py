@@ -4,7 +4,7 @@ from io import StringIO
 from modules.content import Cat
 
 
-class TestsFacts(unittest.TestCase):
+class TestsCatFact(unittest.TestCase):
 
     def test_ok_request(self):
         with patch('modules.content.requests.get') as mock_get:
@@ -26,7 +26,8 @@ class TestsFacts(unittest.TestCase):
         self.assertEqual(mock_out.getvalue().strip(), 'Error occurred: qqq exception')
 
 
-class TestsImages(unittest.TestCase):
+class TestsCatImage(unittest.TestCase):
+
     def test_ok_request(self):
         with patch('modules.content.requests.get') as mock_get:
             mock_get.return_value.ok = True
