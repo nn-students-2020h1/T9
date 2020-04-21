@@ -68,3 +68,6 @@ class SqlDataBase():
         if count:
             return self.cursor.fetchmany(count)
         return self.cursor.fetchall()
+
+    def delete_all_records(self, tableName: str):
+        self.cursor.execute(f"DELETE FROM {tableName}")

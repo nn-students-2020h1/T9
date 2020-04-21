@@ -29,8 +29,8 @@ def log(function):
         update = args[0]
 
         DATA = {
-            "userId": update.effective_user['id'],
-            "userName": update.effective_user['username'],
+            "userId": update['_effective_user']['id'],
+            "userName": update['_effective_user']['username'],
             "call": function.__name__,
             "message": update["message"]["text"],
             "time": strftime("%Y-%m-%d %H:%M:%S", localtime())
