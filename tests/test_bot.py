@@ -46,9 +46,3 @@ class TestLogs(unittest.TestCase):
         log = self.dataBase.getRecords(
             'log', "SELECT userName, message FROM log WHERE userId=1 ORDER BY time DESC", 1)
         self.assertEqual(log, [("admin", "hello")])
-
-    def test_log_save(self):
-        self.dataBase.addRecord("log", TEST_LOG_DATA)
-        log = self.dataBase.getRecords(
-            'log', "SELECT userName, message FROM log WHERE userId=1 ORDER BY time ASC", 1)
-        self.assertEqual(log, [("bot", "test message")])
