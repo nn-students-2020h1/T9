@@ -32,6 +32,7 @@ class TestLogs(unittest.TestCase):
             self.dataBase.createTable('log', fields)
 
         bot.log.dataBase = self.dataBase
+        self.dataBase.delete_all_records("log")
 
     def tearDown(self):
         self.dataBase.delete_all_records("log")
