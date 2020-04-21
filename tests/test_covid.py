@@ -1,11 +1,11 @@
 import unittest
-from unittest.mock import patch
 from io import StringIO
+from unittest.mock import patch
+
 from modules.covid import CovidInfo
 
 
-class CovidTest(unittest.TestCase):
-
+class TestCovid(unittest.TestCase):
     def setUp(self) -> None:
         self.covid_info = CovidInfo()
 
