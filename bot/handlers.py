@@ -4,7 +4,8 @@ from telegram.ext import CallbackContext
 
 from bot.keyboard import content_keyboard, covid_keyboard, main_keyboard
 from bot.log import dataBase, log, logger
-from modules.content import Cat, CovidInfo, get_image_tags, get_random_meme
+from modules.content import Cat, get_image_tags, get_random_meme
+from modules.covid import CovidInfo
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
@@ -51,8 +52,8 @@ def chat_help(update: Update, context: CallbackContext):
     /meme - случайный мем (16+)
     
     /country_stats - топ 5 стран по кол-ву заражённых
-    /province_stats - топ 5 провинций по кол-ву заражённых
     /country_dynamic - динамика заражений по странам
+    /province_stats - топ 5 провинций по кол-ву заражённых
     /province_dynamic - динамика заражений по регионам
     '''
 
@@ -78,7 +79,7 @@ def country_stats(update: Update, context: CallbackContext):
 
 @log
 def country_dynamic(update: Update, context: CallbackContext):
-    data = CovidInfo.get_country_dynamic_top()
+    data = CovidInfo.get_country_dynamic_top(5)
     msg = "Country dynamic top:"
 
     for country in data:
@@ -108,7 +109,7 @@ def province_stats(update: Update, context: CallbackContext):
 
 @log
 def province_dynamic(update: Update, context: CallbackContext):
-    data = CovidInfo.get_province_dynamic_top()
+    data = CovidInfo.get_province_dynamic_top(5)
     msg = "Province dynamic top:"
 
     for province in data:
