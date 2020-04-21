@@ -2,11 +2,10 @@ import unittest
 from io import StringIO
 from unittest.mock import patch
 
-from modules.content import Cat, get_random_meme
+from modules.content import Cat, get_image_tags, get_random_meme
 
 
 class TestCatFact(unittest.TestCase):
-
     def test_ok_request(self):
         with patch('modules.content.requests.get') as mock_get:
             mock_get.return_value.ok = True

@@ -1,38 +1,60 @@
 from telegram import KeyboardButton, ReplyKeyboardMarkup
 
-BUTTON_HELP = "/help"
-BUTTON_HISTORY = "/history"
-BUTTON_CAT_FACT = "/cat_fact"
-BUTTON_CAT_IMAGE = "/cat_image"
-BUTTON_MEME = "/meme"
-BUTTON_COUNTRY_STATS = "/country_stats"
-BUTTON_COUNTRY_DYNAMIC = "/country_dynamic"
-BUTTON_PROVINCE_STATS = "/province_stats"
-BUTTON_PROVINCE_DYNAMIC = "/province_dynamic"
+HELP = "/help"
+HISTORY = "/history"
+
+CAT_IMAGE = "/cat_image"
+CAT_FACT = "/cat_fact"
+MEME = "/meme"
+
+COUNTRY_STATS = "/country_stats"
+COUNTRY_DYNAMIC = "/country_dynamic"
+PROVINCE_STATS = "/province_stats"
+PROVINCE_DYNAMIC = "/province_dynamic"
+
+MAIN_KEYBOARD = "/main"
+COVID_KEYBOARD = "/covid"
+CONTENT_KEYBOARD = "/content"
 
 
-def reply_keyboard():
+def main_keyboard():
     keyboard = [
         [
-            KeyboardButton(BUTTON_HELP),
-            KeyboardButton(BUTTON_HISTORY),
+            KeyboardButton(HELP),
+            KeyboardButton(HISTORY),
         ],
         [
-            KeyboardButton(BUTTON_COUNTRY_STATS),
-            KeyboardButton(BUTTON_PROVINCE_STATS),
-        ],
-        [
-            KeyboardButton(BUTTON_COUNTRY_DYNAMIC),
-            KeyboardButton(BUTTON_PROVINCE_DYNAMIC),
-        ],
-        [
-            KeyboardButton(BUTTON_CAT_IMAGE),
-            KeyboardButton(BUTTON_CAT_FACT),
-            KeyboardButton(BUTTON_MEME),
+            KeyboardButton(COVID_KEYBOARD),
+            KeyboardButton(CONTENT_KEYBOARD),
         ],
     ]
+    return ReplyKeyboardMarkup(keyboard=keyboard, resize_keyboard=True)
 
-    return ReplyKeyboardMarkup(
-        keyboard=keyboard,
-        resize_keyboard=True,
-    )
+
+def covid_keyboard():
+    keyboard = [
+        [
+            KeyboardButton(COUNTRY_STATS),
+            KeyboardButton(COUNTRY_DYNAMIC),
+            KeyboardButton(PROVINCE_STATS),
+            KeyboardButton(PROVINCE_DYNAMIC),
+        ],
+        [
+            KeyboardButton(MAIN_KEYBOARD)
+        ]
+    ]
+    return ReplyKeyboardMarkup(keyboard=keyboard, resize_keyboard=True)
+
+
+def content_keyboard():
+    keyboard = [
+        [
+            KeyboardButton(CAT_IMAGE),
+            KeyboardButton(CAT_FACT),
+            KeyboardButton(MEME)
+        ],
+        [
+            KeyboardButton(MAIN_KEYBOARD)
+        ]
+    ]
+    return ReplyKeyboardMarkup(keyboard=keyboard, resize_keyboard=True)
