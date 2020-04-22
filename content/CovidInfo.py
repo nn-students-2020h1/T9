@@ -79,8 +79,3 @@ class CovidInfo:
     def __get_data(URL):
         response = requests.get(URL)
         return response.json()
-
-
-if __name__ == "__main__":
-    data = CovidInfo.get_country_top()
-    print(data)

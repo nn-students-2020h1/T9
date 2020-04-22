@@ -4,8 +4,7 @@ from telegram.ext import CallbackContext
 
 from bot.keyboard import content_keyboard, covid_keyboard, main_keyboard
 from bot.log import log, log_collection, logger
-from modules.content import Cat, get_image_tags, get_random_meme
-from modules.covid import CovidInfo
+from content import Cat, CovidInfo, get_image_tags, get_random_meme
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
@@ -113,8 +112,7 @@ def province_dynamic(update: Update, context: CallbackContext):
     msg = "Province dynamic top:"
 
     for province in data:
-        msg += f'\n{province["provincestate"]},\
-            {province["countryregion"]}({province["lastdynamic"]} | {province["prevdynamic"]})'
+        msg += f'\n{province["provincestate"]},{province["countryregion"]}({province["lastdynamic"]} | {province["prevdynamic"]})'
 
     msg += "\n\nSee more on our website:\nhttps://bitlowsky.github.io/covid-19-info/"
 

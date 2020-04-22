@@ -1,4 +1,3 @@
 python-telegram-bot
+pymongo
 requests
-bs4
-lxml
