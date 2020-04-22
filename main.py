@@ -15,13 +15,13 @@ def main():
     updater = Updater(bot=bot, use_context=True)
 
     # on different commands - answer in Telegram
-    updater.dispatcher.add_handler(CommandHandler('main', main_menu))
-    updater.dispatcher.add_handler(CommandHandler('covid', covid_menu))
-    updater.dispatcher.add_handler(CommandHandler('content', content_menu))
-
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('help', chat_help))
     updater.dispatcher.add_handler(CommandHandler('history', history))
+
+    updater.dispatcher.add_handler(CommandHandler('main', main_menu))
+    updater.dispatcher.add_handler(CommandHandler('covid', covid_menu))
+    updater.dispatcher.add_handler(CommandHandler('content', content_menu))
 
     updater.dispatcher.add_handler(CommandHandler('cat_image', cat_image))
     updater.dispatcher.add_handler(CommandHandler('cat_fact', cat_fact))
