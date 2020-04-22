@@ -2,7 +2,7 @@ import unittest
 from io import StringIO
 from unittest.mock import patch
 
-from modules.content import Cat, get_image_tags, get_random_meme
+from modules.content import Cat, get_random_meme
 
 
 class TestCatFact(unittest.TestCase):
