@@ -6,15 +6,19 @@ import pymongo
 
 # Enable logging
 LOG_FORMAT = '%(asctime)s - %(levelname)s - %(name)s - %(message)s'
-logging.basicConfig(format=LOG_FORMAT, level=logging.INFO,
-                    filename="bot.log", filemode='w')
+
+file_log = logging.FileHandler('bot.log')
+console_out = logging.StreamHandler()
+
+logging.basicConfig(handlers=(file_log, console_out),
+                    format=LOG_FORMAT, level=logging.INFO)
 
 logger = logging.getLogger(__name__)
 
 # Initialize MongoDB and log_history collection
 client = pymongo.MongoClient("localhost", 27017)
 db = client.T9_bot
-log_history = db.log
+log_collection = db.logs
 
 
 # log decorator
@@ -31,12 +35,11 @@ def log(function):
         }
 
         # Logging user actions
-        log_history.insert_one(DATA)
+        log_collection.insert_one(DATA)
 
         # Create the string for a nice output view
         LOG_INFO = f'user:[{DATA["userId"]} ({DATA["userName"]})] - call:[{DATA["call"]}("{DATA["message"]}")]'
         logger.info(LOG_INFO)
-        print(DATA["time"], LOG_INFO)
 
         return function(*args, **kwargs)
     return inner

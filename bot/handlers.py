@@ -3,7 +3,7 @@ from telegram import Update
 from telegram.ext import CallbackContext
 
 from bot.keyboard import content_keyboard, covid_keyboard, main_keyboard
-from bot.log import log_history, log, logger
+from bot.log import log, log_collection, logger
 from modules.content import Cat, get_image_tags, get_random_meme
 from modules.covid import CovidInfo
 
@@ -126,8 +126,8 @@ def history(update: Update, context: CallbackContext):
     """Send a message when the command /history is issued."""
     userId = update.effective_user['id']
 
-    logs = [log for log in log_history.find({"userId": userId}, {
-                                            "call": 1, 'message': 1, '_id': 0}).sort('time', -1).limit(5)]
+    logs = [log for log in log_collection.find({"userId": userId}, {
+        "call": 1, 'message': 1, '_id': 0}).sort('time', -1).limit(5)]
 
     actions = '\n'.join([f"{log['call']}:({log['message']})" for log in logs])
 
