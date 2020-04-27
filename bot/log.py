@@ -18,7 +18,6 @@ logger = logging.getLogger(__name__)
 # Initialize MongoDB and log_history collection
 client = pymongo.MongoClient("localhost", 27017)
 db = client.T9_bot
-log_collection = db.logs
 
 
 # log decorator
@@ -35,7 +34,7 @@ def log(function):
         }
 
         # Logging user actions
-        log_collection.insert_one(DATA)
+        db.logs.insert_one(DATA)
 
         # Create the string for a nice output view
         LOG_INFO = f'user:[{DATA["userId"]} ({DATA["userName"]})] - call:[{DATA["call"]}("{DATA["message"]}")]'
