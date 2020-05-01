@@ -28,7 +28,7 @@ class TestImageRecognition(unittest.TestCase):
         self.assertEqual(data, [])
 
     def test_exception_request(self):
-        with patch('content.utils.requests.get') as mock_get:
+        with patch('content.web_api.requests.get') as mock_get:
             mock_get.side_effect = Exception
             data = get_image_tags(TestImageRecognition.TEST_URL)
         self.assertEqual(data, [])
