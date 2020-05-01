@@ -10,6 +10,9 @@ def get_random_meme():
         if response.ok:
             return response.text
 
+        else:
+            return "https://pro-training.com.ua/wp-content/uploads/2016/07/No1.jpg"
+
     except Exception:
         return "https://pro-training.com.ua/wp-content/uploads/2016/07/No1.jpg"
 
@@ -22,6 +25,9 @@ def get_image_tags(image_url):
 
         if response.ok:
             return response.json()['tags']
+
+        else:
+            return []
 
     except Exception:
         return []
