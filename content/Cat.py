@@ -1,4 +1,4 @@
-from content.utils import get_data
+import requests
 
 
 class Cat():
@@ -7,12 +7,26 @@ class Cat():
 
     @staticmethod
     def get_image():
-        data = get_data(Cat.IMAGE_URL)
-        if data:
-            return data[0]["url"]
+        try:
+            response = requests.get(Cat.IMAGE_URL)
+
+            if response.ok:
+                return response.json()[0]["url"]
+
+        except Exception:
+            pass
+
+        return "https://pro-training.com.ua/wp-content/uploads/2016/07/No1.jpg"
 
     @staticmethod
     def get_fact():
-        data = get_data(Cat.FACT_URL)
-        if data:
-            return data['text']
+        try:
+            response = requests.get(Cat.FACT_URL)
+
+            if response.ok:
+                return response.json()['text']
+
+        except Exception:
+            pass
+
+        return "Information not found"
