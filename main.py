@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from telegram import Bot
-from telegram.ext import (CommandHandler, Filters,
-                          MessageHandler, Updater)
+from telegram.ext import CommandHandler, Filters, MessageHandler, Updater
 
-from bot.handlers import (cat_fact, cat_image, chat_help, country_dynamic,
-                          country_stats, echo, error, history, meme,
+from bot.handlers import (cat_fact, cat_image, chat_help, content_menu,
+                          country_dynamic, country_stats, covid_menu, echo,
+                          error, history, image_recognition, main_menu, meme,
                           province_dynamic, province_stats, start)
 from bot.log import logger
 from bot.setup import PROXY, TOKEN
@@ -18,9 +18,15 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('help', chat_help))
     updater.dispatcher.add_handler(CommandHandler('history', history))
+
+    updater.dispatcher.add_handler(CommandHandler('main', main_menu))
+    updater.dispatcher.add_handler(CommandHandler('covid', covid_menu))
+    updater.dispatcher.add_handler(CommandHandler('content', content_menu))
+
     updater.dispatcher.add_handler(CommandHandler('cat_image', cat_image))
     updater.dispatcher.add_handler(CommandHandler('cat_fact', cat_fact))
     updater.dispatcher.add_handler(CommandHandler('meme', meme))
+
     updater.dispatcher.add_handler(
         CommandHandler('country_stats', country_stats))
     updater.dispatcher.add_handler(
@@ -32,6 +38,8 @@ def main():
 
     # on noncommand i.e message - echo the message on Telegram
     updater.dispatcher.add_handler(MessageHandler(Filters.text, echo))
+    updater.dispatcher.add_handler(
+        MessageHandler(Filters.photo, image_recognition))
 
     # log all errors
     updater.dispatcher.add_error_handler(error)
