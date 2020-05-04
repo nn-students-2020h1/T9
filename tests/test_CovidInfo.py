@@ -15,7 +15,7 @@ class TestCovidInfo(unittest.TestCase):
                 {'Confirmed': 3}, {'Confirmed': 4},
                 {'Confirmed': 5}, {'Confirmed': 6}
             ]
-            data = self.covid_info.get_province_top()
+            data = self.covid_info.get_province_top(3)
         self.assertIsNotNone(data)
 
     def test_country_top_not_empty(self):
@@ -24,7 +24,7 @@ class TestCovidInfo(unittest.TestCase):
                 {"provincestate": "", "countryregion": "Co1", "lastupdate": "1", "confirmed": 100000, }, {
                     "provincestate": "", "countryregion": "Co2", "lastupdate": "1", "confirmed": 100}
             ]
-            data = self.covid_info.get_country_top()
+            data = self.covid_info.get_country_top(2)
         self.assertIsNotNone(data)
 
     def test_dynamic_top_not_empty(self):
