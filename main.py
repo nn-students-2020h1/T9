@@ -5,7 +5,8 @@ from telegram.ext import CommandHandler, Filters, MessageHandler, Updater
 from bot.handlers import (cat_fact, cat_image, chat_help, content_menu,
                           country_dynamic, country_stats, covid_menu, echo,
                           error, history, image_recognition, main_menu, meme,
-                          province_dynamic, province_stats, start)
+                          province_dynamic, province_stats, start, stats_menu,
+                          dynamic_menu)
 from bot.log import logger
 from bot.setup import PROXY, TOKEN
 
@@ -22,6 +23,8 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('main', main_menu))
     updater.dispatcher.add_handler(CommandHandler('covid', covid_menu))
     updater.dispatcher.add_handler(CommandHandler('content', content_menu))
+    updater.dispatcher.add_handler(CommandHandler('stats', stats_menu))
+    updater.dispatcher.add_handler(CommandHandler('dynamic', dynamic_menu))
 
     updater.dispatcher.add_handler(CommandHandler('cat_image', cat_image))
     updater.dispatcher.add_handler(CommandHandler('cat_fact', cat_fact))

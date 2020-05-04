@@ -4,7 +4,7 @@ from time import localtime, strftime
 from telegram import Update
 from telegram.ext import CallbackContext
 
-from bot.keyboard import content_keyboard, covid_keyboard, main_keyboard
+from bot.keyboard import content_keyboard, covid_keyboard, main_keyboard, stats_keyboard, dynamic_keyboard
 from bot.log import db, log, logger
 from content.Cat import Cat
 from content.CovidInfo import CovidInfo
@@ -48,6 +48,20 @@ def content_menu(update: Update, context: CallbackContext):
     """Send a message when the command /content is issued."""
     update.message.reply_text(
         "You have entered the content menu.", reply_markup=content_keyboard())
+
+
+@log
+def dynamic_menu(update: Update, context: CallbackContext):
+    """Send a message when the command /content is issued."""
+    update.message.reply_text(
+        "You have entered the dynamic menu.", reply_markup=dynamic_keyboard())
+
+
+@log
+def stats_menu(update: Update, context: CallbackContext):
+    """Send a message when the command /content is issued."""
+    update.message.reply_text(
+        "You have entered the stats menu.", reply_markup=stats_keyboard())
 
 
 @log

@@ -14,6 +14,8 @@ PROVINCE_DYNAMIC = "/province_dynamic"
 
 MAIN_KEYBOARD = "/main"
 COVID_KEYBOARD = "/covid"
+DYNAMIC_KEYBOARD = "/dynamic"
+STATS_KEYBOARD = "/stats"
 CONTENT_KEYBOARD = "/content"
 
 
@@ -34,10 +36,34 @@ def main_keyboard():
 def covid_keyboard():
     keyboard = [
         [
-            KeyboardButton(COUNTRY_STATS),
+            KeyboardButton(STATS_KEYBOARD),
+            KeyboardButton(DYNAMIC_KEYBOARD),
+        ],
+        [
+            KeyboardButton(MAIN_KEYBOARD)
+        ]
+    ]
+    return ReplyKeyboardMarkup(keyboard=keyboard, resize_keyboard=True)
+
+
+def dynamic_keyboard():
+    keyboard = [
+        [
             KeyboardButton(COUNTRY_DYNAMIC),
-            KeyboardButton(PROVINCE_STATS),
             KeyboardButton(PROVINCE_DYNAMIC),
+        ],
+        [
+            KeyboardButton(MAIN_KEYBOARD)
+        ]
+    ]
+    return ReplyKeyboardMarkup(keyboard=keyboard, resize_keyboard=True)
+
+
+def stats_keyboard():
+    keyboard = [
+        [
+            KeyboardButton(COUNTRY_STATS),
+            KeyboardButton(PROVINCE_STATS),
         ],
         [
             KeyboardButton(MAIN_KEYBOARD)
