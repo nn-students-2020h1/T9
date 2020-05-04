@@ -8,74 +8,91 @@ class CovidInfo:
     TIMESERIES_URL = ENDPOINT_URL + "timeseries"
 
     @staticmethod
-    def get_country_top():
-        data = CovidInfo.__get_data(
-            CovidInfo.LATEST_URL + "?onlyCountries=true")
-        return sorted(data, key=lambda country: country["confirmed"], reverse=True)
+    def get_country_top(count: int) -> list:
+        return sorted(
+            CovidInfo.get_data(CovidInfo.LATEST_URL + "?onlyCountries=true"),
+            key=lambda country: country["confirmed"],
+            reverse=True,
+        )[:count]
 
     @staticmethod
-    def get_province_top():
-        res = []
-        data = CovidInfo.__get_data(CovidInfo.LATEST_URL)
-
-        for x in data:
-            if ("confirmed" in x) and (len(x['provincestate']) > 0):
-                res.append(x)
-
-        return sorted(res, key=lambda province: province["confirmed"], reverse=True)
+    def get_province_top(count: int) -> list:
+        return sorted(
+            list(filter(
+                lambda x: "confirmed" in x and len(x['provincestate']) > 0,
+                CovidInfo.get_data(CovidInfo.LATEST_URL),
+            )),
+            key=lambda province: province["confirmed"],
+            reverse=True,
+        )[:count]
 
     @staticmethod
-    def get_country_dynamic_top(count):
-        res = []
-        data = CovidInfo.get_dynamic_top()
-
-        for x in data:
-            if (len(x["provincestate"]) == 0) and (len(res) < count):
-                res.append({
+    def get_country_dynamic_top(count: int) -> list:
+        return list(map(
+            lambda x: {
                     "countryregion": x["countryregion"],
                     "lastdynamic": x["lastdynamic"],
                     "prevdynamic": x["prevdynamic"],
-                })
-        return res
+                    },
+            list(filter(
+                lambda x: len(x["provincestate"]) == 0,
+                 CovidInfo.get_dynamic_top()
+                 )),
+        ))[:count]
 
     @staticmethod
-    def get_province_dynamic_top(count):
-        res = []
-        data = CovidInfo.get_dynamic_top()
-
-        for x in data:
-            if (len(x["provincestate"]) != 0) and (len(res) < count):
-                res.append({
+    def get_province_dynamic_top(count: int) -> list:
+        return list(map(
+            lambda x: {
                     "provincestate": x["provincestate"],
                     "countryregion": x["countryregion"],
                     "lastdynamic": x["lastdynamic"],
                     "prevdynamic": x["prevdynamic"],
-                })
-        return res
+                    },
+            list(filter(
+                lambda x: len(x["provincestate"]) != 0,
+                 CovidInfo.get_dynamic_top()
+                 )),
+        ))[:count]
 
     @staticmethod
-    def get_timeseries():
-        data = CovidInfo.__get_data(CovidInfo.TIMESERIES_URL)
-        return data
-
-    @staticmethod
-    def get_dynamic_top():
-        res = []
-        data = CovidInfo.get_timeseries()
-
+    def get_dynamic_top() -> list:
+        data = CovidInfo.get_data(CovidInfo.TIMESERIES_URL)
         dates = list(data[0]["timeseries"].keys())
 
-        for x in data:
-            if ("confirmed" in x["timeseries"][dates[len(dates) - 1]]):
-                res.append({
-                    "provincestate": x["provincestate"],
-                    "countryregion": x["countryregion"],
-                    "lastdynamic": x["timeseries"][dates[len(dates) - 1]]["confirmed"] - x["timeseries"][dates[len(dates) - 2]]["confirmed"],
-                    "prevdynamic": x["timeseries"][dates[len(dates) - 2]]["confirmed"] - x["timeseries"][dates[len(dates) - 3]]["confirmed"],
-                })
-        return sorted(res, key=lambda x: x["lastdynamic"], reverse=True)
+        return sorted(list(map(
+            lambda x: {
+                "provincestate": x["provincestate"],
+                "countryregion": x["countryregion"],
+                "lastdynamic": x["timeseries"][dates[len(dates) - 1]]["confirmed"] - x["timeseries"][dates[len(dates) - 2]]["confirmed"],
+                "prevdynamic": x["timeseries"][dates[len(dates) - 2]]["confirmed"] - x["timeseries"][dates[len(dates) - 3]]["confirmed"],
+            },
+            list(filter(
+                lambda x: "confirmed" in x["timeseries"][dates[len(dates) - 1]],
+                data,
+            )))),
+            key=lambda x: x["lastdynamic"],
+            reverse=True,
+        )
 
     @staticmethod
-    def __get_data(URL):
-        response = requests.get(URL)
-        return response.json()
+    def get_timeseries() -> list:
+        return CovidInfo.get_data(CovidInfo.TIMESERIES_URL)
+
+    @staticmethod
+    def get_data(url):
+        try:
+            response = requests.get(url)
+
+            if response.ok:
+                try:
+                    return response.json()
+
+                except Exception:
+                    return response.text
+
+            else:
+                return None
+
+        except Exception:
+            return None

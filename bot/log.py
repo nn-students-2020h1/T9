@@ -2,7 +2,7 @@
 import logging
 from time import localtime, strftime
 
-import pymongo
+from bot.setup import db
 
 # Enable logging
 LOG_FORMAT = '%(asctime)s - %(levelname)s - %(name)s - %(message)s'
@@ -14,10 +14,6 @@ logging.basicConfig(handlers=(file_log, console_out),
                     format=LOG_FORMAT, level=logging.INFO)
 
 logger = logging.getLogger(__name__)
-
-# Initialize MongoDB and log_history collection
-client = pymongo.MongoClient("localhost", 27017)
-db = client.T9_bot
 
 
 # log decorator
