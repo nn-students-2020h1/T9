@@ -2,6 +2,7 @@ from functools import reduce
 from time import localtime, strftime
 
 from bot.setup import db
+from content import utils
 from content.CovidInfo import CovidInfo
 from content.web_api import get_image_tags
 
@@ -59,7 +60,7 @@ def covid(type: str, count: int) -> str:
 
 
 def history(user_id):
-    logs = list(db.logs.find({"userId": user_id}, {"call": 1, 'message': 1, '_id': 0}).sort('time', -1).limit(5))
+    logs = utils.get_history(user_id, 5)
 
     return reduce(
         lambda msg, log: msg + f"{log['call']}:({log['message']})\n",
