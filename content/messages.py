@@ -39,12 +39,15 @@ def covid(type: str, count: int) -> str:
     })
 
     if not data:
-        data = COVID_FUNC[type](count)
-        db.covid.insert_one({
-            'type': type,
-            'data': data,
-            'date': current_date
-        })
+        try:
+            data = COVID_FUNC[type](count)
+            db.covid.insert_one({
+                'type': type,
+                'data': data,
+                'date': current_date
+            })
+        except Exception:
+            pass
     else:
         data = data['data']
 
