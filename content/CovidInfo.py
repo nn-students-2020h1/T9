@@ -76,6 +76,25 @@ class CovidInfo:
         )
 
     @staticmethod
+    def get_country_top_by_date(date, count) -> list:
+        data = CovidInfo.get_data(CovidInfo.TIMESERIES_URL + "?onlyCountries=true")
+        dates = list(data[0]["timeseries"].keys())
+
+        if date not in dates:
+            return []
+
+        countries = []
+        for country in data:
+            countries.append({
+                "countryregion": country["countryregion"],
+                "confirmed": country["timeseries"][date]["confirmed"],
+                "deaths": country["timeseries"][date]["deaths"],
+                "recovered": country["timeseries"][date]["recovered"],
+            })
+
+        return sorted(countries, key=lambda country: country["confirmed"], reverse=True)[:count]
+
+    @staticmethod
     def get_timeseries() -> list:
         return CovidInfo.get_data(CovidInfo.TIMESERIES_URL)
 
