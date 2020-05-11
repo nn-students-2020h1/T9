@@ -20,21 +20,21 @@ logger = logging.getLogger(__name__)
 def log(function):
     def inner(*args, **kwargs):
         update = args[0]
+        if update and hasattr(update, 'message') and hasattr(update, 'effective_user'):
+            DATA = {
+                "userId": update['_effective_user']['id'],
+                "userName": update['_effective_user']['username'],
+                "call": function.__name__,
+                "message": update["message"]["text"],
+                "time": strftime("%Y-%m-%d %H:%M:%S", localtime())
+            }
 
-        DATA = {
-            "userId": update['_effective_user']['id'],
-            "userName": update['_effective_user']['username'],
-            "call": function.__name__,
-            "message": update["message"]["text"],
-            "time": strftime("%Y-%m-%d %H:%M:%S", localtime())
-        }
+            # Logging user actions
+            db.logs.insert_one(DATA)
 
-        # Logging user actions
-        db.logs.insert_one(DATA)
-
-        # Create the string for a nice output view
-        LOG_INFO = f'user:[{DATA["userId"]} ({DATA["userName"]})] - call:[{DATA["call"]}("{DATA["message"]}")]'
-        logger.info(LOG_INFO)
+            # Create the string for a nice output view
+            LOG_INFO = f'user:[{DATA["userId"]} ({DATA["userName"]})] - call:[{DATA["call"]}("{DATA["message"]}")]'
+            logger.info(LOG_INFO)
 
         return function(*args, **kwargs)
     return inner
