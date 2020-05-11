@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from telegram import Update
-from telegram.ext import CallbackContext
+from telegram.ext import CallbackContext, ConversationHandler
 
 import content.messages as message
 from bot.keyboard import content_keyboard, covid_keyboard, main_keyboard
@@ -62,7 +62,19 @@ def history(update: Update, context: CallbackContext):
 @log
 def country_stats(update: Update, context: CallbackContext):
     """Send a photo when the command /country_stats is issued."""
-    update.message.reply_text(message.covid('country_stats', 5))
+    query = update.message.text
+
+    if query == "/country_stats":
+        update.message.reply_text('Enter the date in the format DAY-MONTH-YEAR or send /latest')
+        return 1
+
+    elif query == '/latest':
+        update.message.reply_text(message.covid('country_stats', 5))
+
+    else:
+        update.message.reply_text(message.covid('country_stats', 5, query))
+
+    return ConversationHandler.END
 
 
 @log

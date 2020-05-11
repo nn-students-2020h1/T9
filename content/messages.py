@@ -1,19 +1,20 @@
 from functools import reduce
-from time import localtime, strftime
+from time import localtime, strftime, time
 
 from bot.setup import db
 from content import utils
 from content.CovidInfo import CovidInfo
 from content.web_api import get_image_tags
+from content.utils import format_date
 
 
-def covid(type: str, count: int) -> str:
-    current_date = strftime("%Y-%m-%d", localtime())
+def covid(type: str, count: int, date=None) -> str:
+    '''!!!date parameter only works with country_stats type!!!'''
 
     WEBSITE_URL = "https://bitlowsky.github.io/covid-19-info"
 
     COVID_FUNC = {
-        'country_stats': CovidInfo.get_country_top,
+        'country_stats': CovidInfo.get_country_top if not date else CovidInfo.get_country_top_by_date,
         'country_dynamic': CovidInfo.get_country_dynamic_top,
         'province_stats': CovidInfo.get_province_top,
         'province_dynamic': CovidInfo.get_province_dynamic_top,
@@ -26,28 +27,35 @@ def covid(type: str, count: int) -> str:
         'province_dynamic': lambda msg, province: msg + f'{province["provincestate"]}, {province["countryregion"]} ({province["lastdynamic"]} | {province["prevdynamic"]})\n',
     }
 
+    yesterday = strftime("%d/%m/%y", localtime(time() - 3600 * 24))
+    date = format_date(yesterday if not date else date)
+
     COVID_HEADER = {
-        'country_stats': "Latest info about the most infected countries:\n",
-        'country_dynamic': "Country dynamic top:\n",
-        'province_stats': "Latest info about the most infected provinces:\n",
-        'province_dynamic': "Province dynamic top:\n",
+        'country_stats': f"Country stats top on {date}:\n",
+        'country_dynamic': f"Country dynamic top on {date}:\n",
+        'province_stats': f"Province stats top on {date}:\n",
+        'province_dynamic': f"Province dynamic top on {date}:\n",
     }
 
     data = db.covid.find_one({
         'type': type,
-        'date': current_date
+        'date': date
     })
 
     if not data:
         try:
             data = COVID_FUNC[type](count)
+
+        except Exception:
+            data = COVID_FUNC[type](date, count)
+
+        finally:
             db.covid.insert_one({
                 'type': type,
                 'data': data,
-                'date': current_date
+                'date': date
             })
-        except Exception:
-            pass
+
     else:
         data = data['data']
 

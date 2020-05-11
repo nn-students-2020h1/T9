@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from telegram import Bot
-from telegram.ext import CommandHandler, Filters, MessageHandler, Updater
+from telegram.ext import CommandHandler, Filters, MessageHandler, Updater, ConversationHandler
 
 from bot.handlers import (cat_fact, cat_image, chat_help, content_menu,
                           country_dynamic, country_stats, covid_menu, echo,
@@ -27,19 +27,22 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('cat_fact', cat_fact))
     updater.dispatcher.add_handler(CommandHandler('meme', meme))
 
-    updater.dispatcher.add_handler(
-        CommandHandler('country_stats', country_stats))
-    updater.dispatcher.add_handler(
-        CommandHandler('country_dynamic', country_dynamic))
-    updater.dispatcher.add_handler(
-        CommandHandler('province_stats', province_stats))
-    updater.dispatcher.add_handler(
-        CommandHandler('province_dynamic', province_dynamic))
+    updater.dispatcher.add_handler(ConversationHandler(
+        entry_points=[CommandHandler('country_stats', country_stats)],
+        states={
+            1: [MessageHandler(Filters.regex(
+                r'^(/latest|(0?[1-9]|[12][0-9]|3[01])[\- ./](0?[1-9]|1[012])[\- ./](20[0-9]{2}|[0-9]{4}|[0-9]{2}))$'),
+                country_stats)],
+        },
+        fallbacks=[CommandHandler('country_stats', country_stats)]
+    ))
+    updater.dispatcher.add_handler(CommandHandler('country_dynamic', country_dynamic))
+    updater.dispatcher.add_handler(CommandHandler('province_stats', province_stats))
+    updater.dispatcher.add_handler(CommandHandler('province_dynamic', province_dynamic))
 
     # on noncommand i.e message - echo the message on Telegram
     updater.dispatcher.add_handler(MessageHandler(Filters.text, echo))
-    updater.dispatcher.add_handler(
-        MessageHandler(Filters.photo, image_recognition))
+    updater.dispatcher.add_handler(MessageHandler(Filters.photo, image_recognition))
 
     # log all errors
     updater.dispatcher.add_error_handler(error)
