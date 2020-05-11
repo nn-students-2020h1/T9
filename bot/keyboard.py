@@ -36,6 +36,8 @@ def covid_keyboard():
         [
             KeyboardButton(COUNTRY_STATS),
             KeyboardButton(COUNTRY_DYNAMIC),
+        ],
+        [
             KeyboardButton(PROVINCE_STATS),
             KeyboardButton(PROVINCE_DYNAMIC),
         ],

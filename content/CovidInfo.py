@@ -76,7 +76,7 @@ class CovidInfo:
         )
 
     @staticmethod
-    def get_country_top_by_date(date, count) -> list:
+    def get_country_top_by_date(date: str, count: int) -> list:
         data = CovidInfo.get_data(CovidInfo.TIMESERIES_URL + "?onlyCountries=true")
         dates = list(data[0]["timeseries"].keys())
 
