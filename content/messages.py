@@ -50,11 +50,12 @@ def covid(type: str, count: int, date=None) -> str:
             data = COVID_FUNC[type](date, count)
 
         finally:
-            db.covid.insert_one({
-                'type': type,
-                'data': data,
-                'date': date
-            })
+            if len(data):
+                db.covid.insert_one({
+                    'type': type,
+                    'data': data,
+                    'date': date
+                })
 
     else:
         data = data['data']
