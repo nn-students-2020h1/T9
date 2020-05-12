@@ -62,5 +62,19 @@ class TestImageRecognitionMessage(unittest.TestCase):
         self.assertEqual(data, "Information not found")
 
 
+class TestWikiMessage(unittest.TestCase):
+    def test_data_found(self):
+        with patch("content.messages.get_wiki_summary_with_db_check") as mock_wiki:
+            mock_wiki.return_value = 'hello'
+            data = messages.wiki_info('hello')
+        self.assertEqual(data, 'hello\n\nhttps://ru.wikipedia.org/wiki/hello')
+
+    def test_data_not_found(self):
+        with patch("content.messages.get_wiki_summary_with_db_check") as mock_wiki:
+            mock_wiki.return_value = Exception('Test')
+            data = messages.wiki_info('hello')
+        self.assertEqual(data, 'Information not found. Try again.')
+
+
 if __name__ == '__main__':
     unittest.main()
