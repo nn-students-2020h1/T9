@@ -69,3 +69,19 @@ def get_wiki_summary(query: str, lang: str = 'ru') -> str:
 
     except Exception:
         raise Exception('Information not found. Try again.')
+
+
+def get_wiki_summary_with_db_check(query):
+    data = db.wiki.find_one({'query': query})
+
+    if data:
+        return data['summary']
+
+    else:
+        try:
+            summary = get_wiki_summary(query)
+            db.wiki.insert_one({'query': query, 'summary': summary})
+            return summary
+
+        except Exception as err:
+            print(err)

@@ -4,7 +4,7 @@ from time import localtime, strftime, time
 from bot.setup import db
 from content.CovidInfo import CovidInfo
 from content.utils import (format_date, get_history, get_image_tags,
-                           get_wiki_summary)
+                           get_wiki_summary_with_db_check)
 
 
 def covid(type: str, count: int, date=None) -> str:
@@ -93,17 +93,9 @@ def image_recognition(image_url):
 
 
 def wiki_info(query):
-    data = db.wiki.find_one({'query': query})
+    try:
+        summary = get_wiki_summary_with_db_check(query)
+        return summary + f'\n\nhttps://ru.wikipedia.org/wiki/{query}'
 
-    if data:
-        return data['summary'] + f'\n\nhttps://ru.wikipedia.org/wiki/{query}'
-
-    else:
-        try:
-            summary = get_wiki_summary(query)
-            db.wiki.insert_one({'query': query, 'summary': summary})
-
-            return summary + f'\n\nhttps://ru.wikipedia.org/wiki/{query}'
-
-        except Exception:
-            return 'Information not found. Try again.'
+    except Exception:
+        return 'Information not found. Try again.'
