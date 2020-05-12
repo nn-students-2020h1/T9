@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from telegram import Bot
-from telegram.ext import CommandHandler, Filters, MessageHandler, Updater, ConversationHandler
+from telegram.ext import (CommandHandler, ConversationHandler, Filters,
+                          MessageHandler, Updater)
 
 from bot.handlers import (cat_fact, cat_image, chat_help, content_menu,
                           country_dynamic, country_stats, covid_menu, echo,
                           error, history, image_recognition, main_menu, meme,
-                          province_dynamic, province_stats, start)
+                          province_dynamic, province_stats, start, wiki)
 from bot.log import logger
 from bot.setup import PROXY, TOKEN
 
@@ -41,8 +42,17 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('province_dynamic', province_dynamic))
 
     # on noncommand i.e message - echo the message on Telegram
-    updater.dispatcher.add_handler(MessageHandler(Filters.text, echo))
     updater.dispatcher.add_handler(MessageHandler(Filters.photo, image_recognition))
+
+    updater.dispatcher.add_handler(ConversationHandler(
+        entry_points=[CommandHandler('wiki', wiki)],
+        states={
+            1: [MessageHandler(Filters.text, wiki)],
+        },
+        fallbacks=[CommandHandler('wiki', wiki)]
+    ))
+
+    updater.dispatcher.add_handler(MessageHandler(Filters.text, echo))
 
     # log all errors
     updater.dispatcher.add_error_handler(error)

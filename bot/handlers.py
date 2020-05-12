@@ -120,6 +120,21 @@ def image_recognition(update: Update, context: CallbackContext):
 
 
 @log
+def wiki(update: Update, context: CallbackContext):
+    """Send a photo when the command /wiki is issued."""
+    query = update.message.text
+
+    if query == "/wiki":
+        update.message.reply_text('What would you like to know?')
+        return 1
+
+    else:
+        update.message.reply_text(message.wiki_info(query))
+
+    return ConversationHandler.END
+
+
+@log
 def error(update: Update, context: CallbackContext):
     """Log Errors caused by Updates."""
     logger.warning(f'Update {update} caused error {context.error}')

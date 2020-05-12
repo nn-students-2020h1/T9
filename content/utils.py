@@ -2,6 +2,8 @@ import re
 from random import randint
 
 import requests
+import wikipedia
+from fuzzywuzzy import process
 
 from bot.setup import db
 
@@ -52,3 +54,18 @@ def format_date(date):
 
     except Exception:
         return ''
+
+
+def get_wiki_summary(query: str, lang: str = 'ru') -> str:
+    wikipedia.set_lang(lang)
+    options = wikipedia.search(query)
+
+    for word in query.split():
+        options += wikipedia.search(word)
+
+    try:
+        nearest, _ = process.extractOne(query, set(options))
+        return wikipedia.summary(nearest)
+
+    except Exception:
+        raise Exception('Information not found. Try again.')
