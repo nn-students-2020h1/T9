@@ -3,6 +3,7 @@ from time import localtime, strftime, time
 
 from bot.setup import db
 from content.CovidInfo import CovidInfo
+from content.CurrencyRates import CurrencyRates
 from content.utils import (format_date, get_history,
                            get_wiki_summary_with_db_check)
 
@@ -97,3 +98,12 @@ def wiki_info(query):
 
     except Exception:
         return 'Information not found. Try again.'
+
+
+def currency_rates():
+    try:
+        rates = CurrencyRates.get_currency_rates()
+        return '\n'.join([f'{rates[i][0]}: {rates[i][1]}' for i in range(len(rates))])
+
+    except Exception:
+        return 'Information not found.'

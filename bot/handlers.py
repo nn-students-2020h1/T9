@@ -158,6 +158,12 @@ def wiki(update: Update, context: CallbackContext):
 
 
 @log
+def currency_rates(update: Update, context: CallbackContext):
+    """Send a message when the command /currency_rates is issued."""
+    update.message.reply_text(message.currency_rates())
+
+
+@log
 def error(update: Update, context: CallbackContext):
     """Log Errors caused by Updates."""
     logger.warning(f'Update {update} caused error {context.error}')
