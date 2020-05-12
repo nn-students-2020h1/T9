@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import requests
 from telegram import Bot
 from telegram.ext import (CommandHandler, ConversationHandler, Filters,
                           MessageHandler, Updater)
@@ -14,6 +15,7 @@ from bot.setup import PROXY, TOKEN
 def main():
     bot = Bot(token=TOKEN, base_url=PROXY)
     updater = Updater(bot=bot, use_context=True)
+    requests.get('https://bitlowsky-api.herokuapp.com/init/')
 
     # on different commands - answer in Telegram
     updater.dispatcher.add_handler(CommandHandler('start', start))
