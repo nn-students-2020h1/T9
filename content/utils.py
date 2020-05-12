@@ -25,11 +25,26 @@ def get_meme_url(meme_id: int = None, depth=10) -> str:
     return meme_url
 
 
-def get_image_hash(image_url: str):
+def get_image_hash_local(image_url: str) -> str:
     return imagehash.average_hash(Image.open(urlopen(image_url)))
 
 
-def get_image_tags(image_url):
+def get_image_hash_web(image_url: str) -> str:
+    url = f"https://bitlowsky-api.herokuapp.com/image-hash?url={image_url}"
+
+    try:
+        response = requests.get(url)
+
+        if response.ok:
+            return response.json()['hash']
+
+    except Exception:
+        pass
+
+    return ''
+
+
+def get_image_tags(image_url: str) -> list:
     url = f"https://bitlowsky-api.herokuapp.com/image-recognition?url={image_url}"
 
     try:
@@ -45,8 +60,7 @@ def get_image_tags(image_url):
 
 
 def get_image_tags_with_db_check(image_url):
-    print(image_url)
-    image_hash = get_image_hash(image_url)
+    image_hash = get_image_hash_web(image_url)
     data = db.images.find_one({'hash': image_hash})
 
     if data:
