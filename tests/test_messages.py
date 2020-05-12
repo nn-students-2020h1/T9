@@ -36,13 +36,13 @@ class TestCovidMessage(unittest.TestCase):
 
 class TestHistoryMessage(unittest.TestCase):
     def test_history_found(self):
-        with patch('content.messages.utils.get_history') as mock_get:
+        with patch('content.messages.get_history') as mock_get:
             mock_get.return_value = [{'call': 'hello', 'message': 'hello'}]
             data = messages.history(1)
         self.assertEqual(data, 'Action history:\nhello:(hello)\n')
 
     def test_history_not_found(self):
-        with patch('content.messages.utils.get_history') as mock_get:
+        with patch('content.messages.get_history') as mock_get:
             mock_get.return_value = []
             data = messages.history(1)
         self.assertEqual(data, "Information not found")
