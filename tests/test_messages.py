@@ -50,13 +50,13 @@ class TestHistoryMessage(unittest.TestCase):
 
 class TestImageRecognitionMessage(unittest.TestCase):
     def test_tags_found(self):
-        with patch("content.messages.get_image_tags") as mock_get:
+        with patch("content.messages.get_image_tags_with_db_check") as mock_get:
             mock_get.return_value = ['cat']
             data = messages.image_recognition('cat')
         self.assertEqual(data, 'On the picture:\n*cat')
 
     def test_tags_not_found(self):
-        with patch("content.messages.get_image_tags") as mock_get:
+        with patch("content.messages.get_image_tags_with_db_check") as mock_get:
             mock_get.return_value = []
             data = messages.image_recognition('cat')
         self.assertEqual(data, "Information not found")
