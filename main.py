@@ -44,7 +44,13 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('province_dynamic', province_dynamic))
 
     # on noncommand i.e message - echo the message on Telegram
-    updater.dispatcher.add_handler(MessageHandler(Filters.photo, image_recognition))
+    updater.dispatcher.add_handler(ConversationHandler(
+        entry_points=[MessageHandler(Filters.photo, image_recognition)],
+        states={
+            1: [MessageHandler(Filters.regex(r'tags|wiki|back'), image_recognition)],
+        },
+        fallbacks=[]
+    ))
 
     updater.dispatcher.add_handler(ConversationHandler(
         entry_points=[CommandHandler('wiki', wiki)],

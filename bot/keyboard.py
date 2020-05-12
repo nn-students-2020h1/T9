@@ -62,3 +62,16 @@ def content_keyboard():
         ]
     ]
     return ReplyKeyboardMarkup(keyboard=keyboard, resize_keyboard=True)
+
+
+def image_recognition_keyboard():
+    keyboard = [
+        [
+            KeyboardButton('tags'),
+            KeyboardButton('wiki')
+        ],
+        [
+            KeyboardButton('back')
+        ]
+    ]
+    return ReplyKeyboardMarkup(keyboard=keyboard, resize_keyboard=True)

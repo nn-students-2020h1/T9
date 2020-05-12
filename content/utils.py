@@ -124,3 +124,20 @@ def get_wiki_summary_with_db_check(query):
 
         except Exception as err:
             print(err)
+
+
+def get_last_image_url(user_id):
+    data = db.last_image_url.find_one({'user_id': user_id})
+
+    if data:
+        return data['image_url']
+
+    return ''
+
+
+def set_last_image_url(user_id, image_url):
+    if db.last_image_url.find_one({'user_id': user_id}):
+        db.last_image_url.update_one({'user_id': user_id}, {'$set': {'image_url': image_url}})
+
+    else:
+        db.last_image_url.insert_one({'user_id': user_id, 'image_url': image_url})

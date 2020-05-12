@@ -3,10 +3,12 @@ from telegram import Update
 from telegram.ext import CallbackContext, ConversationHandler
 
 import content.messages as message
-from bot.keyboard import content_keyboard, covid_keyboard, main_keyboard
+from bot.keyboard import (content_keyboard, covid_keyboard,
+                          image_recognition_keyboard, main_keyboard)
 from bot.log import log, logger
 from content.Cat import Cat
-from content.utils import get_image_tags_with_db_check, get_meme_url
+from content.utils import (get_image_tags_with_db_check, get_last_image_url,
+                           get_meme_url, set_last_image_url)
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
@@ -115,11 +117,29 @@ def meme(update: Update, context: CallbackContext):
 
 @log
 def image_recognition(update: Update, context: CallbackContext):
-    image_url = update.message.photo[-1].get_file().file_path
-    tags = get_image_tags_with_db_check(image_url)
+    user_id = update['_effective_user']['id']
+    image_url = get_last_image_url(user_id)
 
-    update.message.reply_text(message.image_recognition(tags))
-    update.message.reply_text(message.wiki_info(tags[0]))
+    query = update.message.text
+
+    if not query:
+        image_url = update.message.photo[-1].get_file().file_path
+        set_last_image_url(user_id, image_url)
+        update.message.reply_text('Select the option.', reply_markup=image_recognition_keyboard())
+        return 1
+
+    elif query == 'tags':
+        tags = get_image_tags_with_db_check(image_url)
+        update.message.reply_text(message.image_recognition(tags), reply_markup=main_keyboard())
+
+    elif query == 'wiki':
+        tags = get_image_tags_with_db_check(image_url)
+        update.message.reply_text(message.wiki_info(tags[0]), reply_markup=main_keyboard())
+
+    elif query == 'back':
+        main_menu(update, context)
+
+    return ConversationHandler.END
 
 
 @log
