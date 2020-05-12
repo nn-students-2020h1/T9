@@ -6,13 +6,16 @@ import requests
 from bot.setup import db
 
 
-def get_meme_url(meme_id: int = None) -> str:
+def get_meme_url(meme_id: int = None, depth=10) -> str:
+    if depth == 0:
+        return ''
+
     meme_id = meme_id if meme_id else randint(1, 100000)
     meme_url = f"https://memasik.ru/memesimages/meme{meme_id}.jpg"
     response = requests.get(meme_url)
 
     if response.text == 'false':
-        return get_meme_url()
+        return get_meme_url(depth=depth-1)
 
     return meme_url
 
