@@ -104,7 +104,8 @@ def get_wiki_summary(query: str, lang: str = 'ru') -> str:
 
     try:
         nearest, _ = process.extractOne(query, set(options))
-        return wikipedia.summary(nearest)
+        page = wikipedia.page(nearest)
+        return page.summary, page.url
 
     except Exception:
         raise Exception('Information not found. Try again.')
@@ -114,13 +115,13 @@ def get_wiki_summary_with_db_check(query):
     data = db.wiki.find_one({'query': query})
 
     if data:
-        return data['summary']
+        return data['summary'], data['url']
 
     else:
         try:
-            summary = get_wiki_summary(query)
-            db.wiki.insert_one({'query': query, 'summary': summary})
-            return summary
+            summary, url = get_wiki_summary(query)
+            db.wiki.insert_one({'query': query, 'summary': summary, 'url': url})
+            return summary, url
 
         except Exception as err:
             print(err)
