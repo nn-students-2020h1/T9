@@ -72,5 +72,19 @@ class TestWikiMessage(unittest.TestCase):
         self.assertEqual(data, 'Information not found. Try again.')
 
 
+class TestCurrencyRatesMessage(unittest.TestCase):
+    def test_data_found(self):
+        with patch("content.messages.CurrencyRates.get_currency_rates") as mock_get:
+            mock_get.return_value = [('USD', '1')]
+            data = messages.currency_rates()
+        self.assertEqual(data, 'USD: 1')
+
+    def test_data_not_found(self):
+        with patch("content.messages.CurrencyRates.get_currency_rates") as mock_get:
+            mock_get.return_value = Exception
+            data = messages.currency_rates()
+        self.assertEqual(data, 'Information not found.')
+
+
 if __name__ == '__main__':
     unittest.main()
