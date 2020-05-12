@@ -6,7 +6,7 @@ import content.messages as message
 from bot.keyboard import content_keyboard, covid_keyboard, main_keyboard
 from bot.log import log, logger
 from content.Cat import Cat
-from content.web_api import get_random_meme
+from content.utils import get_random_meme
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
