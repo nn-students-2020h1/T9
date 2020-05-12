@@ -6,6 +6,7 @@ HISTORY = "/history"
 CAT_IMAGE = "/cat_image"
 CAT_FACT = "/cat_fact"
 MEME = "/meme"
+WIKI = '/wiki'
 
 COUNTRY_STATS = "/country_stats"
 COUNTRY_DYNAMIC = "/country_dynamic"
@@ -25,6 +26,7 @@ def main_keyboard():
         ],
         [
             KeyboardButton(COVID_KEYBOARD),
+            KeyboardButton(WIKI),
             KeyboardButton(CONTENT_KEYBOARD),
         ],
     ]

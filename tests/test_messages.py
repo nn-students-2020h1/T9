@@ -36,13 +36,13 @@ class TestCovidMessage(unittest.TestCase):
 
 class TestHistoryMessage(unittest.TestCase):
     def test_history_found(self):
-        with patch('content.messages.utils.get_history') as mock_get:
+        with patch('content.messages.get_history') as mock_get:
             mock_get.return_value = [{'call': 'hello', 'message': 'hello'}]
             data = messages.history(1)
         self.assertEqual(data, 'Action history:\nhello:(hello)\n')
 
     def test_history_not_found(self):
-        with patch('content.messages.utils.get_history') as mock_get:
+        with patch('content.messages.get_history') as mock_get:
             mock_get.return_value = []
             data = messages.history(1)
         self.assertEqual(data, "Information not found")
@@ -60,6 +60,20 @@ class TestImageRecognitionMessage(unittest.TestCase):
             mock_get.return_value = []
             data = messages.image_recognition('cat')
         self.assertEqual(data, "Information not found")
+
+
+class TestWikiMessage(unittest.TestCase):
+    def test_data_found(self):
+        with patch("content.messages.get_wiki_summary_with_db_check") as mock_wiki:
+            mock_wiki.return_value = 'hello'
+            data = messages.wiki_info('hello')
+        self.assertEqual(data, 'hello\n\nhttps://ru.wikipedia.org/wiki/hello')
+
+    def test_data_not_found(self):
+        with patch("content.messages.get_wiki_summary_with_db_check") as mock_wiki:
+            mock_wiki.return_value = Exception('Test')
+            data = messages.wiki_info('hello')
+        self.assertEqual(data, 'Information not found. Try again.')
 
 
 if __name__ == '__main__':

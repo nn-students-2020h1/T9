@@ -1,6 +1,40 @@
 import re
+from random import randint
+
+import requests
+import wikipedia
+from fuzzywuzzy import process
 
 from bot.setup import db
+
+
+def get_meme_url(meme_id: int = None, depth=10) -> str:
+    if depth == 0:
+        return ''
+
+    meme_id = meme_id if meme_id else randint(1, 100000)
+    meme_url = f"https://memasik.ru/memesimages/meme{meme_id}.jpg"
+    response = requests.get(meme_url)
+
+    if response.text == 'false':
+        return get_meme_url(depth=depth-1)
+
+    return meme_url
+
+
+def get_image_tags(image_url):
+    url = f"https://bitlowsky-api.herokuapp.com/image-recognition?url={image_url}"
+
+    try:
+        response = requests.get(url)
+
+        if response.ok:
+            return response.json()['tags']
+
+    except Exception:
+        pass
+
+    return []
 
 
 def get_history(user_id, count):
@@ -20,3 +54,34 @@ def format_date(date):
 
     except Exception:
         return ''
+
+
+def get_wiki_summary(query: str, lang: str = 'ru') -> str:
+    wikipedia.set_lang(lang)
+    options = wikipedia.search(query)
+
+    for word in query.split():
+        options += wikipedia.search(word)
+
+    try:
+        nearest, _ = process.extractOne(query, set(options))
+        return wikipedia.summary(nearest)
+
+    except Exception:
+        raise Exception('Information not found. Try again.')
+
+
+def get_wiki_summary_with_db_check(query):
+    data = db.wiki.find_one({'query': query})
+
+    if data:
+        return data['summary']
+
+    else:
+        try:
+            summary = get_wiki_summary(query)
+            db.wiki.insert_one({'query': query, 'summary': summary})
+            return summary
+
+        except Exception as err:
+            print(err)

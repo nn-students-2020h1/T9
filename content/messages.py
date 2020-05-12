@@ -2,10 +2,9 @@ from functools import reduce
 from time import localtime, strftime, time
 
 from bot.setup import db
-from content import utils
 from content.CovidInfo import CovidInfo
-from content.web_api import get_image_tags
-from content.utils import format_date
+from content.utils import (format_date, get_history, get_image_tags,
+                           get_wiki_summary_with_db_check)
 
 
 def covid(type: str, count: int, date=None) -> str:
@@ -72,7 +71,7 @@ def covid(type: str, count: int, date=None) -> str:
 
 
 def history(user_id):
-    logs = utils.get_history(user_id, 5)
+    logs = get_history(user_id, 5)
 
     return reduce(
         lambda msg, log: msg + f"{log['call']}:({log['message']})\n",
@@ -91,3 +90,12 @@ def image_recognition(image_url):
         'On the picture:' if len(tags)
         else "Information not found",
     )
+
+
+def wiki_info(query):
+    try:
+        summary = get_wiki_summary_with_db_check(query)
+        return summary + f'\n\nhttps://ru.wikipedia.org/wiki/{query}'
+
+    except Exception:
+        return 'Information not found. Try again.'
