@@ -44,6 +44,24 @@ def get_image_tags(image_url):
     return []
 
 
+def get_image_tags_with_db_check(image_url):
+    print(image_url)
+    image_hash = get_image_hash(image_url)
+    data = db.images.find_one({'hash': image_hash})
+
+    if data:
+        return data['tags']
+
+    else:
+        try:
+            tags = get_image_tags(image_url)
+            db.images.insert_one({'hash': image_hash, 'tags': tags})
+            return tags
+
+        except Exception as err:
+            print(err)
+
+
 def get_history(user_id, count):
     return list(db.logs.find({"userId": user_id}, {"call": 1, 'message': 1, 'time': 1, '_id': 0}).sort('time', -1).limit(5))
 

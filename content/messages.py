@@ -3,7 +3,8 @@ from time import localtime, strftime, time
 
 from bot.setup import db
 from content.CovidInfo import CovidInfo
-from content.utils import (format_date, get_history, get_image_tags,
+from content.utils import (format_date, get_history,
+                           get_image_tags_with_db_check,
                            get_wiki_summary_with_db_check)
 
 
@@ -82,7 +83,7 @@ def history(user_id):
 
 
 def image_recognition(image_url):
-    tags = get_image_tags(image_url)
+    tags = get_image_tags_with_db_check(image_url)
 
     return reduce(
         lambda msg, tag: msg + '\n*' + tag,
