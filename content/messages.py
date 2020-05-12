@@ -6,6 +6,7 @@ from content.CovidInfo import CovidInfo
 from content.CurrencyRates import CurrencyRates
 from content.utils import (format_date, get_history,
                            get_wiki_summary_with_db_check)
+from content.Weather import Weather
 
 
 def covid(type: str, count: int, date=None) -> str:
@@ -104,6 +105,18 @@ def currency_rates():
     try:
         rates = CurrencyRates.get_currency_rates()
         return '\n'.join([f'{rates[i][0]}: {rates[i][1]}' for i in range(len(rates))])
+
+    except Exception:
+        return 'Information not found.'
+
+
+def weather():
+    try:
+        data = Weather.get_data(7)
+        return '\n'.join([
+            f'{data[i][1]}, {data[i][0]}:\n{data[i][2]} | {data[i][3]}\n{data[i][4]}\n'
+            for i in range(len(data))
+        ])
 
     except Exception:
         return 'Information not found.'

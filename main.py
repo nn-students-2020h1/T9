@@ -8,7 +8,7 @@ from bot.handlers import (
     cat_fact, cat_image, chat_help, content_menu, country_dynamic,
     country_stats, covid_menu, currency_rates, echo, error, history,
     image_recognition, main_menu, meme, province_dynamic, province_stats,
-    start, wiki)
+    start, weather, wiki)
 from bot.log import logger
 from bot.setup import PROXY, TOKEN
 
@@ -31,6 +31,7 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('cat_fact', cat_fact))
     updater.dispatcher.add_handler(CommandHandler('meme', meme))
     updater.dispatcher.add_handler(CommandHandler('currency_rates', currency_rates))
+    updater.dispatcher.add_handler(CommandHandler('weather', weather))
 
     updater.dispatcher.add_handler(ConversationHandler(
         entry_points=[CommandHandler('country_stats', country_stats)],

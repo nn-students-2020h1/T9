@@ -164,6 +164,12 @@ def currency_rates(update: Update, context: CallbackContext):
 
 
 @log
+def weather(update: Update, context: CallbackContext):
+    """Send a message when the command /weather is issued."""
+    update.message.reply_text(message.weather())
+
+
+@log
 def error(update: Update, context: CallbackContext):
     """Log Errors caused by Updates."""
     logger.warning(f'Update {update} caused error {context.error}')

@@ -17,6 +17,7 @@ MAIN_KEYBOARD = "/main"
 COVID_KEYBOARD = "/covid"
 CONTENT_KEYBOARD = "/content"
 CURRENCY_RATES = "/currency_rates"
+WEATHER = "/weather"
 
 
 def main_keyboard():
@@ -29,6 +30,7 @@ def main_keyboard():
         [
             KeyboardButton(COVID_KEYBOARD),
             KeyboardButton(WIKI),
+            KeyboardButton(WEATHER),
             KeyboardButton(CONTENT_KEYBOARD),
         ],
     ]
