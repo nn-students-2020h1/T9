@@ -1,9 +1,12 @@
 import re
 from random import randint
+from urllib.request import urlopen
 
+import imagehash
 import requests
 import wikipedia
 from fuzzywuzzy import process
+from PIL import Image
 
 from bot.setup import db
 
@@ -20,6 +23,10 @@ def get_meme_url(meme_id: int = None, depth=10) -> str:
         return get_meme_url(depth=depth-1)
 
     return meme_url
+
+
+def get_image_hash(image_url: str):
+    return imagehash.average_hash(Image.open(urlopen(image_url)))
 
 
 def get_image_tags(image_url):
