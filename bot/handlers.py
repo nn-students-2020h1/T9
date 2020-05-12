@@ -6,7 +6,7 @@ import content.messages as message
 from bot.keyboard import content_keyboard, covid_keyboard, main_keyboard
 from bot.log import log, logger
 from content.Cat import Cat
-from content.utils import get_random_meme
+from content.utils import get_meme_url
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
@@ -110,7 +110,7 @@ def cat_fact(update: Update, context: CallbackContext):
 @log
 def meme(update: Update, context: CallbackContext):
     """Send a photo when the command /meme is issued."""
-    update.message.reply_photo(get_random_meme())
+    update.message.reply_photo(get_meme_url())
 
 
 @log

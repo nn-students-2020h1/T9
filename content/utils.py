@@ -1,23 +1,20 @@
 import re
+from random import randint
 
 import requests
 
 from bot.setup import db
 
 
-def get_random_meme():
-    URL = "https://bitlowsky-api.herokuapp.com/meme/"
+def get_meme_url(meme_id: int = None) -> str:
+    meme_id = meme_id if meme_id else randint(1, 100000)
+    meme_url = f"https://memasik.ru/memesimages/meme{meme_id}.jpg"
+    response = requests.get(meme_url)
 
-    try:
-        response = requests.get(URL)
+    if response.text == 'false':
+        return get_meme_url()
 
-        if response.ok:
-            return response.text
-
-    except Exception:
-        pass
-
-    return "https://pro-training.com.ua/wp-content/uploads/2016/07/No1.jpg"
+    return meme_url
 
 
 def get_image_tags(image_url):
