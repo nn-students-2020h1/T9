@@ -6,7 +6,7 @@ import content.messages as message
 from bot.keyboard import content_keyboard, covid_keyboard, main_keyboard
 from bot.log import log, logger
 from content.Cat import Cat
-from content.utils import get_meme_url
+from content.utils import get_image_tags_with_db_check, get_meme_url
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
@@ -116,7 +116,10 @@ def meme(update: Update, context: CallbackContext):
 @log
 def image_recognition(update: Update, context: CallbackContext):
     image_url = update.message.photo[-1].get_file().file_path
-    update.message.reply_text(message.image_recognition(image_url))
+    tags = get_image_tags_with_db_check(image_url)
+
+    update.message.reply_text(message.image_recognition(tags))
+    update.message.reply_text(message.wiki_info(tags[0]))
 
 
 @log
