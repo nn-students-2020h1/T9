@@ -49,25 +49,21 @@ class TestHistoryMessage(unittest.TestCase):
 
 
 class TestImageRecognitionMessage(unittest.TestCase):
-    def test_tags_found(self):
-        with patch("content.messages.get_image_tags_with_db_check") as mock_get:
-            mock_get.return_value = ['cat']
-            data = messages.image_recognition('cat')
+    def test_with_tags(self):
+        data = messages.image_recognition(['cat'])
         self.assertEqual(data, 'On the picture:\n*cat')
 
-    def test_tags_not_found(self):
-        with patch("content.messages.get_image_tags_with_db_check") as mock_get:
-            mock_get.return_value = []
-            data = messages.image_recognition('cat')
+    def test_without_tags(self):
+        data = messages.image_recognition([])
         self.assertEqual(data, "Information not found")
 
 
 class TestWikiMessage(unittest.TestCase):
     def test_data_found(self):
         with patch("content.messages.get_wiki_summary_with_db_check") as mock_wiki:
-            mock_wiki.return_value = 'hello'
+            mock_wiki.return_value = ('hello', 'hello_url')
             data = messages.wiki_info('hello')
-        self.assertEqual(data, 'hello\n\nhttps://ru.wikipedia.org/wiki/hello')
+        self.assertEqual(data, 'hello\n\nhello_url')
 
     def test_data_not_found(self):
         with patch("content.messages.get_wiki_summary_with_db_check") as mock_wiki:
