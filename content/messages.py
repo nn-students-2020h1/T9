@@ -82,9 +82,7 @@ def history(user_id):
     )
 
 
-def image_recognition(image_url):
-    tags = get_image_tags_with_db_check(image_url)
-
+def image_recognition(tags: list) -> str:
     return reduce(
         lambda msg, tag: msg + '\n*' + tag,
         tags,
