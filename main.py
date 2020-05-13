@@ -31,7 +31,14 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('cat_fact', cat_fact))
     updater.dispatcher.add_handler(CommandHandler('meme', meme))
     updater.dispatcher.add_handler(CommandHandler('currency_rates', currency_rates))
-    updater.dispatcher.add_handler(CommandHandler('weather', weather))
+
+    updater.dispatcher.add_handler(ConversationHandler(
+        entry_points=[CommandHandler('weather', weather)],
+        states={
+            1: [MessageHandler(Filters.regex(r'\d+|all|back'), weather)],
+        },
+        fallbacks=[CommandHandler('main', main_menu)]
+    ))
 
     updater.dispatcher.add_handler(ConversationHandler(
         entry_points=[CommandHandler('country_stats', country_stats)],
@@ -40,8 +47,9 @@ def main():
                 r'^(/latest|(0?[1-9]|[12][0-9]|3[01])[\- ./](0?[1-9]|1[012])[\- ./](20[0-9]{2}|[0-9]{4}|[0-9]{2}))$'),
                 country_stats)],
         },
-        fallbacks=[CommandHandler('country_stats', country_stats)]
+        fallbacks=[CommandHandler('main', main_menu)]
     ))
+
     updater.dispatcher.add_handler(CommandHandler('country_dynamic', country_dynamic))
     updater.dispatcher.add_handler(CommandHandler('province_stats', province_stats))
     updater.dispatcher.add_handler(CommandHandler('province_dynamic', province_dynamic))

@@ -6,7 +6,7 @@ class Weather:
     URL = "https://yandex.ru/pogoda"
 
     @staticmethod
-    def get_data(count_of_days: int) -> list:
+    def get_data(count_of_days: int = None) -> list:
         soup = BeautifulSoup(requests.get(Weather.URL).text, 'lxml')
 
         days = list(map(lambda x: x.text, soup.find_all(

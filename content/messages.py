@@ -110,9 +110,9 @@ def currency_rates():
         return 'Information not found.'
 
 
-def weather():
+def weather(count_of_days: int = None) -> str:
     try:
-        data = Weather.get_data(3)
+        data = Weather.get_data(count_of_days)
         daylight_info = Weather.get_daylight_info()
 
         daylight_part = '\n'.join([

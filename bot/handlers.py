@@ -4,7 +4,8 @@ from telegram.ext import CallbackContext, ConversationHandler
 
 import content.messages as message
 from bot.keyboard import (content_keyboard, covid_keyboard,
-                          image_recognition_keyboard, main_keyboard)
+                          image_recognition_keyboard, main_keyboard,
+                          weather_keyboard)
 from bot.log import log, logger
 from content.Cat import Cat
 from content.utils import (get_image_tags_with_db_check, get_last_image_url,
@@ -17,8 +18,7 @@ from content.utils import (get_image_tags_with_db_check, get_last_image_url,
 @log
 def start(update: Update, context: CallbackContext):
     """Send a message when the command /start is issued."""
-    update.message.reply_text(
-        f'Hello, {update.effective_user.first_name}!', reply_markup=main_keyboard())
+    update.message.reply_text(f'Hello, {update.effective_user.first_name}!', reply_markup=main_keyboard())
 
 
 @log
@@ -31,22 +31,20 @@ def chat_help(update: Update, context: CallbackContext):
 @log
 def main_menu(update: Update, context: CallbackContext):
     """Send a message when the command /main is issued."""
-    update.message.reply_text(
-        'You are back in the main menu.', reply_markup=main_keyboard())
+    update.message.reply_text('You are back in the main menu.', reply_markup=main_keyboard())
+    return ConversationHandler.END
 
 
 @log
 def covid_menu(update: Update, context: CallbackContext):
     """Send a message when the command /covid is issued."""
-    update.message.reply_text(
-        "You have entered the covid menu.", reply_markup=covid_keyboard())
+    update.message.reply_text("You have entered the covid menu.", reply_markup=covid_keyboard())
 
 
 @log
 def content_menu(update: Update, context: CallbackContext):
     """Send a message when the command /content is issued."""
-    update.message.reply_text(
-        "You have entered the content menu.", reply_markup=content_keyboard())
+    update.message.reply_text("You have entered the content menu.", reply_markup=content_keyboard())
 
 
 @log
@@ -166,7 +164,22 @@ def currency_rates(update: Update, context: CallbackContext):
 @log
 def weather(update: Update, context: CallbackContext):
     """Send a message when the command /weather is issued."""
-    update.message.reply_text(message.weather())
+    query = update.message.text
+
+    if query == '/weather':
+        update.message.reply_text('Select this option or enter the number of days manually.', reply_markup=weather_keyboard())
+        return 1
+
+    elif query == 'all':
+        update.message.reply_text(message.weather(), reply_markup=main_keyboard())
+
+    elif query == 'back':
+        update.message.reply_text('You are back in the main menu.', reply_markup=main_keyboard())
+
+    else:
+        update.message.reply_text(message.weather(int(query)), reply_markup=main_keyboard())
+
+    return ConversationHandler.END
 
 
 @log

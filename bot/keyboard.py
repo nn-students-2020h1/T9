@@ -79,3 +79,17 @@ def image_recognition_keyboard():
         ]
     ]
     return ReplyKeyboardMarkup(keyboard=keyboard, resize_keyboard=True)
+
+
+def weather_keyboard():
+    keyboard = [
+        [
+            KeyboardButton('3'),
+            KeyboardButton('7'),
+            KeyboardButton('all'),
+        ],
+        [
+            KeyboardButton('back')
+        ]
+    ]
+    return ReplyKeyboardMarkup(keyboard=keyboard, resize_keyboard=True)
