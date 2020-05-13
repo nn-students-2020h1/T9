@@ -86,5 +86,26 @@ class TestCurrencyRatesMessage(unittest.TestCase):
         self.assertEqual(data, 'Information not found.')
 
 
+class TestWeatherMessage(unittest.TestCase):
+    def test_data_found(self):
+        with patch("content.messages.Weather") as mock:
+            mock.get_data.return_value = [('1', '2', '3', '4', '5')]
+            mock.get_daylight_info.return_value = {
+                'daylight_time': '6',
+                'sunrise_time': '7',
+                'sunset_time': '8',
+                'day_info': '9',
+            }
+            data = messages.weather()
+        self.assertEqual(data, 'Световой день: 6\nВосход: 7 | Закат: 8\n9\n\n2, 1:\n3 | 4\n5\n')
+
+    def test_data_not_found(self):
+        with patch("content.messages.Weather") as mock:
+            mock.get_data.return_value = Exception
+            mock.get_daylight_info.return_value = Exception
+            data = messages.weather()
+        self.assertEqual(data, 'Information not found.')
+
+
 if __name__ == '__main__':
     unittest.main()
