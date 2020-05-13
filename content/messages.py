@@ -112,11 +112,21 @@ def currency_rates():
 
 def weather():
     try:
-        data = Weather.get_data(7)
-        return '\n'.join([
+        data = Weather.get_data(3)
+        daylight_info = Weather.get_daylight_info()
+
+        daylight_part = '\n'.join([
+            f'Световой день: {daylight_info["daylight_time"]}',
+            f'Восход: {daylight_info["sunrise_time"]} | Закат: {daylight_info["sunset_time"]}',
+            '\n'.join(daylight_info['day_info']),
+        ])
+
+        weather_part = '\n'.join([
             f'{data[i][1]}, {data[i][0]}:\n{data[i][2]} | {data[i][3]}\n{data[i][4]}\n'
             for i in range(len(data))
         ])
+
+        return daylight_part + '\n\n' + weather_part
 
     except Exception:
         return 'Information not found.'
