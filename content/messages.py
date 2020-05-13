@@ -3,8 +3,10 @@ from time import localtime, strftime, time
 
 from bot.setup import db
 from content.CovidInfo import CovidInfo
-from content.utils import (format_date, get_history, get_image_tags,
+from content.CurrencyRates import CurrencyRates
+from content.utils import (format_date, get_history,
                            get_wiki_summary_with_db_check)
+from content.Weather import Weather
 
 
 def covid(type: str, count: int, date=None) -> str:
@@ -81,9 +83,7 @@ def history(user_id):
     )
 
 
-def image_recognition(image_url):
-    tags = get_image_tags(image_url)
-
+def image_recognition(tags: list) -> str:
     return reduce(
         lambda msg, tag: msg + '\n*' + tag,
         tags,
@@ -94,8 +94,39 @@ def image_recognition(image_url):
 
 def wiki_info(query):
     try:
-        summary = get_wiki_summary_with_db_check(query)
-        return summary + f'\n\nhttps://ru.wikipedia.org/wiki/{query}'
+        summary, url = get_wiki_summary_with_db_check(query)
+        return summary + f'\n\n{url}'
 
     except Exception:
         return 'Information not found. Try again.'
+
+
+def currency_rates():
+    try:
+        rates = CurrencyRates.get_currency_rates()
+        return '\n'.join([f'{rates[i][0]}: {rates[i][1]}' for i in range(len(rates))])
+
+    except Exception:
+        return 'Information not found.'
+
+
+def weather(count_of_days: int = None) -> str:
+    try:
+        data = Weather.get_data(count_of_days)
+        daylight_info = Weather.get_daylight_info()
+
+        daylight_part = '\n'.join([
+            f'Световой день: {daylight_info["daylight_time"]}',
+            f'Восход: {daylight_info["sunrise_time"]} | Закат: {daylight_info["sunset_time"]}',
+            '\n'.join(daylight_info['day_info']),
+        ])
+
+        weather_part = '\n'.join([
+            f'{data[i][1]}, {data[i][0]}:\n{data[i][2]} | {data[i][3]}\n{data[i][4]}\n'
+            for i in range(len(data))
+        ])
+
+        return daylight_part + '\n\n' + weather_part
+
+    except Exception:
+        return 'Information not found.'

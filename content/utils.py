@@ -1,9 +1,12 @@
 import re
 from random import randint
+from urllib.request import urlopen
 
+import imagehash
 import requests
 import wikipedia
 from fuzzywuzzy import process
+from PIL import Image
 
 from bot.setup import db
 
@@ -22,7 +25,26 @@ def get_meme_url(meme_id: int = None, depth=10) -> str:
     return meme_url
 
 
-def get_image_tags(image_url):
+def get_image_hash_local(image_url: str) -> str:
+    return imagehash.average_hash(Image.open(urlopen(image_url)))
+
+
+def get_image_hash_web(image_url: str) -> str:
+    url = f"https://bitlowsky-api.herokuapp.com/image-hash?url={image_url}"
+
+    try:
+        response = requests.get(url)
+
+        if response.ok:
+            return response.json()['hash']
+
+    except Exception:
+        pass
+
+    return ''
+
+
+def get_image_tags(image_url: str) -> list:
     url = f"https://bitlowsky-api.herokuapp.com/image-recognition?url={image_url}"
 
     try:
@@ -35,6 +57,23 @@ def get_image_tags(image_url):
         pass
 
     return []
+
+
+def get_image_tags_with_db_check(image_url):
+    image_hash = get_image_hash_web(image_url)
+    data = db.images.find_one({'hash': image_hash})
+
+    if data:
+        return data['tags']
+
+    else:
+        try:
+            tags = get_image_tags(image_url)
+            db.images.insert_one({'hash': image_hash, 'tags': tags})
+            return tags
+
+        except Exception as err:
+            print(err)
 
 
 def get_history(user_id, count):
@@ -65,7 +104,8 @@ def get_wiki_summary(query: str, lang: str = 'ru') -> str:
 
     try:
         nearest, _ = process.extractOne(query, set(options))
-        return wikipedia.summary(nearest)
+        page = wikipedia.page(nearest)
+        return page.summary, page.url
 
     except Exception:
         raise Exception('Information not found. Try again.')
@@ -75,13 +115,30 @@ def get_wiki_summary_with_db_check(query):
     data = db.wiki.find_one({'query': query})
 
     if data:
-        return data['summary']
+        return data['summary'], data['url']
 
     else:
         try:
-            summary = get_wiki_summary(query)
-            db.wiki.insert_one({'query': query, 'summary': summary})
-            return summary
+            summary, url = get_wiki_summary(query)
+            db.wiki.insert_one({'query': query, 'summary': summary, 'url': url})
+            return summary, url
 
         except Exception as err:
             print(err)
+
+
+def get_last_image_url(user_id):
+    data = db.last_image_url.find_one({'user_id': user_id})
+
+    if data:
+        return data['image_url']
+
+    return ''
+
+
+def set_last_image_url(user_id, image_url):
+    if db.last_image_url.find_one({'user_id': user_id}):
+        db.last_image_url.update_one({'user_id': user_id}, {'$set': {'image_url': image_url}})
+
+    else:
+        db.last_image_url.insert_one({'user_id': user_id, 'image_url': image_url})
