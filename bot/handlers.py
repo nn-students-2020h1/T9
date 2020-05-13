@@ -134,9 +134,6 @@ def image_recognition(update: Update, context: CallbackContext):
         tags = get_image_tags_with_db_check(image_url)
         update.message.reply_text(message.wiki_info(tags[0]), reply_markup=main_keyboard())
 
-    elif query == 'back':
-        main_menu(update, context)
-
     return ConversationHandler.END
 
 
@@ -172,9 +169,6 @@ def weather(update: Update, context: CallbackContext):
 
     elif query == 'all':
         update.message.reply_text(message.weather(), reply_markup=main_keyboard())
-
-    elif query == 'back':
-        update.message.reply_text('You are back in the main menu.', reply_markup=main_keyboard())
 
     else:
         update.message.reply_text(message.weather(int(query)), reply_markup=main_keyboard())

@@ -23,19 +23,10 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('help', chat_help))
     updater.dispatcher.add_handler(CommandHandler('history', history))
 
-    updater.dispatcher.add_handler(CommandHandler('main', main_menu))
-    updater.dispatcher.add_handler(CommandHandler('covid', covid_menu))
-    updater.dispatcher.add_handler(CommandHandler('content', content_menu))
-
-    updater.dispatcher.add_handler(CommandHandler('cat_image', cat_image))
-    updater.dispatcher.add_handler(CommandHandler('cat_fact', cat_fact))
-    updater.dispatcher.add_handler(CommandHandler('meme', meme))
-    updater.dispatcher.add_handler(CommandHandler('currency_rates', currency_rates))
-
     updater.dispatcher.add_handler(ConversationHandler(
         entry_points=[CommandHandler('weather', weather)],
         states={
-            1: [MessageHandler(Filters.regex(r'\d+|all|back'), weather)],
+            1: [MessageHandler(Filters.regex(r'\d+|all'), weather)],
         },
         fallbacks=[CommandHandler('main', main_menu)]
     ))
@@ -50,17 +41,12 @@ def main():
         fallbacks=[CommandHandler('main', main_menu)]
     ))
 
-    updater.dispatcher.add_handler(CommandHandler('country_dynamic', country_dynamic))
-    updater.dispatcher.add_handler(CommandHandler('province_stats', province_stats))
-    updater.dispatcher.add_handler(CommandHandler('province_dynamic', province_dynamic))
-
-    # on noncommand i.e message - echo the message on Telegram
     updater.dispatcher.add_handler(ConversationHandler(
         entry_points=[MessageHandler(Filters.photo, image_recognition)],
         states={
-            1: [MessageHandler(Filters.regex(r'tags|wiki|back'), image_recognition)],
+            1: [MessageHandler(Filters.regex(r'tags|wiki'), image_recognition)],
         },
-        fallbacks=[]
+        fallbacks=[CommandHandler('main', main_menu)]
     ))
 
     updater.dispatcher.add_handler(ConversationHandler(
@@ -68,9 +54,23 @@ def main():
         states={
             1: [MessageHandler(Filters.text, wiki)],
         },
-        fallbacks=[CommandHandler('wiki', wiki)]
+        fallbacks=[CommandHandler('main', main_menu)]
     ))
 
+    updater.dispatcher.add_handler(CommandHandler('main', main_menu))
+    updater.dispatcher.add_handler(CommandHandler('covid', covid_menu))
+    updater.dispatcher.add_handler(CommandHandler('content', content_menu))
+
+    updater.dispatcher.add_handler(CommandHandler('cat_image', cat_image))
+    updater.dispatcher.add_handler(CommandHandler('cat_fact', cat_fact))
+    updater.dispatcher.add_handler(CommandHandler('meme', meme))
+    updater.dispatcher.add_handler(CommandHandler('currency_rates', currency_rates))
+
+    updater.dispatcher.add_handler(CommandHandler('country_dynamic', country_dynamic))
+    updater.dispatcher.add_handler(CommandHandler('province_stats', province_stats))
+    updater.dispatcher.add_handler(CommandHandler('province_dynamic', province_dynamic))
+
+    # on noncommand i.e message - echo the message on Telegram
     updater.dispatcher.add_handler(MessageHandler(Filters.text, echo))
 
     # log all errors
