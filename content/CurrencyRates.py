@@ -8,18 +8,25 @@ class CurrencyRates:
     @staticmethod
     def get_currency_rates():
         soup = BeautifulSoup(requests.get(CurrencyRates.URL).text, 'lxml')
+        tables = soup.find_all("div", attrs={"class": "table key-indicator_table"})
 
-        names = list(map(
-            lambda x: x.find("div", attrs={"class": "col-md-3 offset-md-1 _subinfo"}).text,
-            soup.find_all("div", attrs={"class": "d-flex title-subinfo"}),
-        ))
+        tds = []
+        for table in tables:
+            trs = table.find_all('tr')
 
-        current_rates = list(map(lambda x: x.text, soup.find_all(
-            "td", attrs={"class": "value td-w-4 _bold _end mono-num _with-icon _down _green"})))
+            for tr in trs:
+                tds.append(list(map(lambda x: x.text, tr.find_all('td'))))
 
-        metal_rates = list(map(lambda x: x.text, soup.find_all(
-            "td", attrs={"class": "value td-w-4 _bold _end mono-num"})))
+        search = ['USD', 'EUR', 'Au', 'Ag', 'Pt', 'Pd']
+        out = []
 
-        rates = current_rates + metal_rates[2:]
+        for td in tds:
+            for x in search:
+                if td[0].find(x) != -1:
+                    out.append((x, float(td[-1:][0].replace(',', '.').replace(' ', ''))))
 
-        return list(zip(names, map(lambda rate: rate + ' RUB', rates)))
+        return out
+
+
+if __name__ == "__main__":
+    print(CurrencyRates.get_currency_rates())

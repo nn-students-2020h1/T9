@@ -104,7 +104,7 @@ def wiki_info(query):
 def currency_rates():
     try:
         rates = CurrencyRates.get_currency_rates()
-        return '\n'.join([f'{rates[i][0]}: {rates[i][1]}' for i in range(len(rates))])
+        return '\n'.join([f'{rates[i][0]}: {rates[i][1]} RUB' for i in range(len(rates))])
 
     except Exception:
         return 'Information not found.'
