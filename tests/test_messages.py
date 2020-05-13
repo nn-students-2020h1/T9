@@ -77,7 +77,7 @@ class TestCurrencyRatesMessage(unittest.TestCase):
         with patch("content.messages.CurrencyRates.get_currency_rates") as mock_get:
             mock_get.return_value = [('USD', '1')]
             data = messages.currency_rates()
-        self.assertEqual(data, 'USD: 1')
+        self.assertEqual(data, 'USD: 1 RUB')
 
     def test_data_not_found(self):
         with patch("content.messages.CurrencyRates.get_currency_rates") as mock_get:
