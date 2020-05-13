@@ -33,3 +33,32 @@ class Weather:
             temp_night[_slice:],
             conditions[_slice:]
         ))[:count_of_days]
+
+    @staticmethod
+    def get_daylight_info() -> dict:
+        soup = BeautifulSoup(requests.get(Weather.URL).text, 'lxml')
+
+        daylight_time = soup.find(
+            "div",
+            attrs={"class": "sun-card__day-duration-value"},
+        ).text
+
+        sunrise_time = soup.find(
+            "div",
+            attrs={"class": "sun-card__sunrise-sunset-info sun-card__sunrise-sunset-info_value_rise-time"},
+        ).text[-5:]
+
+        sunset_time = soup.find(
+            "div",
+            attrs={"class": "sun-card__sunrise-sunset-info sun-card__sunrise-sunset-info_value_set-time"},
+        ).text[-5:]
+
+        day_info = list(map(lambda x: x.text, soup.find_all(
+            "div", attrs={"class": "sun-card__text-info-value"})))
+
+        return {
+            'daylight_time': daylight_time,
+            'sunrise_time': sunrise_time,
+            'sunset_time': sunset_time,
+            'day_info': day_info,
+        }
