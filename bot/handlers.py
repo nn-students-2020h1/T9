@@ -128,11 +128,13 @@ def image_recognition(update: Update, context: CallbackContext):
 
     elif query == 'tags':
         tags = get_image_tags_with_db_check(image_url)
-        update.message.reply_text(message.image_recognition(tags), reply_markup=main_keyboard())
+        update.message.reply_text(message.image_recognition(tags))
+        return
 
     elif query == 'wiki':
         tags = get_image_tags_with_db_check(image_url)
-        update.message.reply_text(message.wiki_info(tags[0]), reply_markup=main_keyboard())
+        update.message.reply_text(message.wiki_info(tags[0]))
+        return
 
     return ConversationHandler.END
 
