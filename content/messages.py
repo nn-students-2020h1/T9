@@ -1,5 +1,6 @@
 from functools import reduce
 from time import localtime, strftime, time
+from urllib.parse import unquote
 
 from bot.setup import db
 from content.CovidInfo import CovidInfo
@@ -95,7 +96,7 @@ def image_recognition(tags: list) -> str:
 def wiki_info(query):
     try:
         summary, url = get_wiki_summary_with_db_check(query)
-        return '. '.join(summary.split('. ')[:3]) + f'.\n\n{url}'
+        return '. '.join(summary.split('. ')[:3]) + f'.\n\n{unquote(url)}'
 
     except Exception:
         return 'Information not found. Try again.'
