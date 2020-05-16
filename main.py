@@ -46,7 +46,8 @@ def main():
     updater.dispatcher.add_handler(ConversationHandler(
         entry_points=[MessageHandler(Filters.photo, image_recognition)],
         states={
-            1: [MessageHandler(Filters.regex(r'tags|wiki'), image_recognition)],
+            1: [MessageHandler(Filters.regex(r'tags|wiki'), image_recognition),
+                MessageHandler(Filters.photo, image_recognition)],
         },
         fallbacks=[CommandHandler('main', main_menu)]
     ))
