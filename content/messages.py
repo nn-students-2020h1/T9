@@ -95,7 +95,7 @@ def image_recognition(tags: list) -> str:
 def wiki_info(query):
     try:
         summary, url = get_wiki_summary_with_db_check(query)
-        return summary + f'\n\n{url}'
+        return '. '.join(summary.split('. ')[:3]) + f'.\n\n{url}'
 
     except Exception:
         return 'Information not found. Try again.'
