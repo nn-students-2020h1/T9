@@ -16,7 +16,7 @@ PROVINCE_DYNAMIC = "/province_dynamic"
 MAIN_KEYBOARD = "/main"
 COVID_KEYBOARD = "/covid"
 CONTENT_KEYBOARD = "/content"
-CURRENCY_RATES = "/currency_rates"
+CURRENCY_RATES = "/currency"
 WEATHER = "/weather"
 
 
@@ -25,10 +25,10 @@ def main_keyboard():
         [
             KeyboardButton(HELP),
             KeyboardButton(HISTORY),
-            KeyboardButton(CURRENCY_RATES),
+            KeyboardButton(COVID_KEYBOARD),
         ],
         [
-            KeyboardButton(COVID_KEYBOARD),
+            KeyboardButton(CURRENCY_RATES),
             KeyboardButton(WIKI),
             KeyboardButton(WEATHER),
             KeyboardButton(CONTENT_KEYBOARD),

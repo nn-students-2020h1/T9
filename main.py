@@ -66,7 +66,7 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('cat_image', cat_image))
     updater.dispatcher.add_handler(CommandHandler('cat_fact', cat_fact))
     updater.dispatcher.add_handler(CommandHandler('meme', meme))
-    updater.dispatcher.add_handler(CommandHandler('currency_rates', currency_rates))
+    updater.dispatcher.add_handler(CommandHandler('currency', currency_rates))
 
     updater.dispatcher.add_handler(CommandHandler('country_dynamic', country_dynamic))
     updater.dispatcher.add_handler(CommandHandler('province_stats', province_stats))
