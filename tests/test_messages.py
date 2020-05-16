@@ -63,7 +63,7 @@ class TestWikiMessage(unittest.TestCase):
         with patch("content.messages.get_wiki_summary_with_db_check") as mock_wiki:
             mock_wiki.return_value = ('hello', 'hello_url')
             data = messages.wiki_info('hello')
-        self.assertEqual(data, 'hello\n\nhello_url')
+        self.assertEqual(data, 'hello..\n\nhello_url')
 
     def test_data_not_found(self):
         with patch("content.messages.get_wiki_summary_with_db_check") as mock_wiki:
