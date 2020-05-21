@@ -1,11 +1,9 @@
 # Team9 
 
-This is a repository for Telegram bot which will be developed by team 9 as part of Intel Academic Program Python Course.
+This is a repository for Telegram bot which will be developed by team 9 as part of Intel Academic Program Python Course.  
+You can view chat screenshots in our [presentation](T9_Telegram_bot.pdf).
 
-## Bot description:
-You can view screenshots in our [presentation](T9_Telegram_bot.pdf).
-
-### Сommand list:
+## Сommand list:
 
 #### > /start
 After using this command, the bot will understand that you want to communicate with it and will say Hello to you, and then offer its help.
