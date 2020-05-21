@@ -3,6 +3,7 @@
 This is a repository for Telegram bot which will be developed by team 9 as part of Intel Academic Program Python Course.
 
 ## Bot description:
+You can view screenshots in our [presentation](T9_Telegram_bot.pdf).
 
 ### Сommand list:
 
