@@ -4,7 +4,7 @@ This is a repository for Telegram bot which will be developed by team 9 as part 
 
 ## Bot description:
 
-### The bot currently supports that commands:
+### Сommand list:
 
 #### > /start
 After using this command, the bot will understand that you want to communicate with it and will say Hello to you, and then offer its help.
@@ -13,10 +13,16 @@ After using this command, the bot will understand that you want to communicate w
 Bot will tell you which commands it supports at the moment.
 
 #### > /history
-Using this command, you will see the last 5 queries
+Using this command, you will see the last 5 queries.
 
-#### > /quote
-If you wanted to start reading a new book, but didn 't knew how to choose it, the bot will help you: it will display a quote from a random book, indicating the author, the title of the book, and even the character that the phrase belongs to.
+#### > /currency
+Сurrent exchange rates in terms of the ruble.
+
+#### > /weather
+Weather forecast up to 30 days ahead.
+
+#### > /wiki
+Search for information by search query in Wikipedia.
 
 #### > /cat_image
 Want to get some cuteness? Use this command and the bot will show you a photo of a cute and funny cat.
@@ -24,11 +30,29 @@ Want to get some cuteness? Use this command and the bot will show you a photo of
 #### > /cat_fact
 A little more cuteness. Use this command and get an interesting fact about cats.
 
-#### > /province_stats
-More and more people are infected with the coronavirus every day. Use this command to find out which 5 provinces have the most new infections in the last 24 hours.
+#### > /meme
+Use this command to get a random meme. Attention! It can be offensive.
 
 #### > /country_stats
 This command will help you find out which country is currently the most infected.
 
-#### > /meme
-Use this command to get a random meme. Attention! It can be offensive.
+#### > /country_dynamic
+Dynamics of covid-19 diseases by country over the last 2 days.
+
+#### > /province_stats
+More and more people are infected with the coronavirus every day. Use this command to find out which 5 provinces have the most new infections in the last 24 hours.
+
+#### > /province_dynamic
+Dynamics of covid-19 diseases by province over the last 2 days.
+
+### image_recognition
+#### > tags
+Get a few guesses about what is depicted in the image.
+
+#### > wiki
+Search in Wikipedia by image.
+
+
+
+
+
